@@ -12,6 +12,7 @@ against each paper's published values. Do not edit by hand; re-run after any cha
 | Acharya 2005: formula vs Table IV, 23 weeks x 9 percentiles (207 cells), tolerance ±0.01 | PASS (189/207 within tolerance; the 18 cells at weeks 19 and 21 are a known table discrepancy, formula used per Andrew 2026-09-29) |
 | ACOG CO 700: GA from EDD, 9 hand-worked dates | PASS |
 | Percentile display rule (never shows a number on the wrong side of a cutoff) | PASS |
+| Second check: perinatology.com, 6 hand-entered cases vs the app's Hadlock method | PASS |
 
 ## 1. Hadlock 1991 (EFW percentile)
 
@@ -66,7 +67,7 @@ and 2.5th. Only `table` reports them as the 10th and 3rd.
 
 **Status: PASS.** Andrew's rule (QUESTIONS.md, Q12) was to compute from the model and stop if model and
 table disagreed. The stated SDs did, so the work stopped; on 2026-09-29 he chose `table`, which reproduces
-all 123 cells of Table 1 within tolerance. Pending: a hand check on perinatology.com (section 5).
+all 123 cells of Table 1 within tolerance. Confirmed by the blind perinatology.com hand check (section 5): 6/6 match.
 
 ## 2. Acharya 2005 (umbilical artery S/D percentile)
 
@@ -153,17 +154,19 @@ number is on the same side of the cutoff as the true value, so "10th" never appe
 
 ## 5. Second check: perinatology.com
 
-perinatology.com refuses headless browsers (Incapsula "Request unsuccessful", 2026-09-28), so these are
-for Andrew to type into its Hadlock fetal weight percentile calculator by hand. The answer also shows which
-spread that site uses: at each exact Table 1 cutoff weight, `table` gives the 10th/3rd, `pct127` about the
-9th/2.5th, and `log012` about the 6th/0.8th.
+perinatology.com refuses headless browsers (Incapsula "Request unsuccessful", 2026-09-28), so Andrew
+typed these into its Fetal Biometry 5.0 calculator by hand (EFW entered directly), without being told
+the expected answers. The answers also show which spread that site uses: at each exact Table 1 cutoff
+weight, `table` gives the 10th/3rd, `pct127` about the 9th/2.4th, and `log012` about the 6th/0.8th.
+
+**Result: all 6 match the app's `table` method to the site's one decimal.** By contrast, `pct127` and `pct13` disagree with the site on 5 of the 6 rows (they agree only at the 50th), and `log012` on all 6.
 
 | GA | EFW (g) | Table 1 says | App `table` | App `pct127` | App `log012` | App `pct13` | perinatology.com |
 |---|---|---|---|---|---|---|---|
-| 30w 0d | 1294 | 10th | 10.0 | 9.0 | 6.0 | 9.5 | _to fill in_ |
-| 30w 0d | 1169 | 3rd | 3.0 | 2.4 | 0.8 | 2.7 | _to fill in_ |
-| 40w 0d | 3004 | 10th | 10.0 | 9.0 | 6.0 | 9.6 | _to fill in_ |
-| 36w 0d | 2813 | 50th | 50.0 | 50.0 | 49.9 | 50.0 | _to fill in_ |
-| 28w 3d | 1000 | - | 4.9 | 4.2 | 2.0 | 4.6 | _to fill in_ |
-| 34w 0d | 2000 | - | 11.6 | 10.6 | 7.5 | 11.1 | _to fill in_ |
+| 30w 0d | 1294 | 10th | 10.0 | 9.0 | 6.0 | 9.5 | 10.0% |
+| 30w 0d | 1169 | 3rd | 3.0 | 2.4 | 0.8 | 2.7 | 3.0% |
+| 40w 0d | 3004 | 10th | 10.0 | 9.0 | 6.0 | 9.6 | 10.0% |
+| 36w 0d | 2813 | 50th | 50.0 | 50.0 | 49.9 | 50.0 | 50.0% |
+| 28w 3d | 1000 | - | 4.9 | 4.2 | 2.0 | 4.6 | 4.9% |
+| 34w 0d | 2000 | - | 11.6 | 10.6 | 7.5 | 11.1 | 11.6% |
 

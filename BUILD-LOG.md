@@ -2,16 +2,15 @@
 
 | | |
 |---|---|
-| **Turns** | 4 |
-| **Claude working time** | 30 m 57 s, by `date` (turn 1: 4 m 22 s; turn 2: 12 m 13 s incl. Andrew's answering; turn 3: 13 m 10 s; turn 4: 1 m 12 s) |
-| **Wall-clock since turn 1** | 14 h 49 m (2026-09-28 22:45:45 → 2026-09-29 13:35:13 CDT) |
+| **Turns** | 5 |
+| **Claude working time** | 32 m 33 s, by `date` (turn 1: 4 m 22 s; turn 2: 12 m 13 s incl. Andrew's answering; turn 3: 13 m 10 s; turn 4: 1 m 12 s; turn 5: 1 m 36 s) |
+| **Wall-clock since turn 1** | 14 h 58 m (2026-09-28 22:45:45 → 2026-09-29 13:44:17 CDT) |
 | **Live URL** | https://fetal-calc.netlify.app (placeholder, no clinical content) |
 
 **Where things stand**
-1. Calculator on branch `calculator` (PR #1, draft): signed off, and `npm run validate` passes every check.
-2. Andrew chose Hadlock `table` (pending a hand check on perinatology.com) and the Acharya formula at all weeks.
-3. Waiting on him: six perinatology.com inputs (blind check), then the Netlify–GitHub link.
-4. After both: merge PR #1 → `main` deploys the real app to the live URL.
+1. Calculator on PR #1, ready for review: every validation check passes, including a blind perinatology.com check (6/6 match).
+2. Next: Andrew links Netlify to GitHub (Developer settings → Continuous deployment → Link repository).
+3. Then: confirm auto-deploy, and on his word merge PR #1 so the real app goes live at the fixed URL.
 
 ## Questions
 
@@ -159,3 +158,28 @@ already read fully in grayscale, and a tint on a clinical readout adds noise wit
 
 **Tip:** When you ask someone to double-check a number, give them the inputs but not the answer
 you expect. Their check is then independent, not an echo.
+
+---
+
+## Turn 5 — 2026-09-29, 13:42:41 → 13:44:17 CDT (1 m 36 s)
+
+**Asked:** perinatology.com results for the six blind inputs (10.0, 3.0, 10.0, 50.0, 4.9, 11.6%,
+from its Fetal Biometry 5.0 page with EFW entered directly, screenshot attached). The Netlify page
+didn't have the options I described; help him find where to go.
+
+**Did:** All six matched the app's chosen Hadlock method (`table`) to the site's one decimal; recorded
+them in the validator, which now carries a sixth summary check (PASS). Caught and fixed two wrong
+sentences in my own write-up by testing them against the numbers ("none of the other methods match":
+false at the 50th row; "5 of 6": `log012` actually misses all 6). Looked up Netlify's current docs:
+the repository link moved to **Project configuration → Developer settings → Continuous deployment
+→ Repository → Link repository**. His Netlify screenshot didn't come through, so I gave the steps
+from the docs. Marked PR #1 ready for review.
+
+**Changed:** `validation/validate.mjs`, `VALIDATION.md` (6/6 checks pass), `SIGN-OFF.md`, this log.
+PR #1 marked ready. Production unchanged.
+
+**Tip:** When a tool's menus don't match the instructions, have Claude check the vendor's current
+docs instead of guessing. Menus get renamed, and the docs say where things moved.
+
+**Tip:** Ask Claude to check its own summary sentences against the data. Two small overstatements
+were caught this way before they reached the record.

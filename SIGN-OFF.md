@@ -5,6 +5,9 @@
 > design judgment; CO 700 "is the newest"); (4) he'll link Netlify and run the perinatology.com
 > inputs, with steps and numbers given in the session. Both gates are now set in `site/calc.js`, and
 > `npm run validate` passes.
+>
+> **perinatology.com hand check, 2026-09-29 13:42 CDT:** Andrew entered six cases blind into its
+> Fetal Biometry 5.0 calculator; all six match the `table` method to one decimal (VALIDATION.md §5).
 
 Written 2026-09-29, turn 3. The app is built on branch `calculator` (draft PR), but **no clinical
 math is live**: production still shows the placeholder, and in the real build both percentiles

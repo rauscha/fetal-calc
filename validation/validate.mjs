@@ -96,6 +96,19 @@ const fmtCases = [
 const fmtRows = fmtCases.map(([v, o, want]) => ({ v, o, want, got: C.formatPercentile(v, o) }));
 results.format = fmtRows.every(r => r.got === r.want);
 
+// ------------------------------------------------------------------------------------------ perinatology.com (hand check)
+// Inputs sent to Andrew 2026-09-29 without the expected answers (a blind check).
+const peri = [[30, 0, 1294, '10th'], [30, 0, 1169, '3rd'], [40, 0, 3004, '10th'], [36, 0, 2813, '50th'],
+  [28, 3, 1000, '-'], [34, 0, 2000, '-']];
+// Andrew's report, 2026-09-29 13:42 CDT, from perinatology.com/calculators/Fetal%20Biometry%205.0.html
+// ("EFW entry method: Enter EFW directly"; the page labels its EFW percentile "Hadlock").
+const periSite = { '30-0-1294': '10.0%', '30-0-1169': '3.0%', '40-0-3004': '10.0%', '36-0-2813': '50.0%',
+  '28-3-1000': '4.9%', '34-0-2000': '11.6%' };
+results.perinatology = peri.every(([wk, d, g]) => {
+  const s = periSite[`${wk}-${d}-${g}`];
+  return s !== undefined && Math.abs(parseFloat(s) - C.hadlockPercentile(g, wk + d / 7, 'table')) < 0.05;
+});
+
 // ------------------------------------------------------------------------------------------ Write report
 const tick = ok => ok ? 'PASS' : '**FAIL**';
 const today = new Date().toISOString().slice(0, 10);
@@ -113,6 +126,7 @@ p(`| Hadlock 1991: spread vs Table 1 3rd/10th/90th/97th, active method = \`${C.H
 p(`| Acharya 2005: formula vs Table IV, 23 weeks x 9 percentiles (207 cells), tolerance ±0.01 | ${tick(results.acharya)}${achFails.length ? ` (${achCells.length - achFails.length}/${achCells.length} within tolerance; the ${achFails.length} cells at weeks ${[...new Set(achFails.map(c => c.week))].join(' and ')} are a known table discrepancy, formula used per Andrew 2026-09-29)` : ''} |`);
 p(`| ACOG CO 700: GA from EDD, ${acogRows.length} hand-worked dates | ${tick(results.acog)} |`);
 p(`| Percentile display rule (never shows a number on the wrong side of a cutoff) | ${tick(results.format)} |`);
+p(`| Second check: perinatology.com, 6 hand-entered cases vs the app's Hadlock method | ${tick(results.perinatology)} |`);
 p('');
 
 p('## 1. Hadlock 1991 (EFW percentile)');
@@ -159,7 +173,7 @@ p('');
 if (C.HADLOCK_METHOD) {
   p(`**Status: ${results.hadlockSpread ? 'PASS' : '**FAIL**'}.** Andrew's rule (QUESTIONS.md, Q12) was to compute from the model and stop if model and`);
   p('table disagreed. The stated SDs did, so the work stopped; on 2026-09-29 he chose `' + C.HADLOCK_METHOD + '`, which reproduces');
-  p('all 123 cells of Table 1 within tolerance. Pending: a hand check on perinatology.com (section 5).');
+  p(`all 123 cells of Table 1 within tolerance. ${results.perinatology ? 'Confirmed by the blind perinatology.com hand check (section 5): 6/6 match.' : 'Pending: a hand check on perinatology.com (section 5).'}`);
 } else {
   p('**Status: ON HOLD.** Andrew set the rule (QUESTIONS.md, Q12): compute from the model and, if model and');
   p('table disagree beyond a set tolerance, stop and show him. They do, so the app computes no EFW percentile');
@@ -222,17 +236,17 @@ for (const r of fmtRows) p(`| ${r.v} | ${JSON.stringify(r.o)} | ${r.want} | ${r.
 p('');
 p('## 5. Second check: perinatology.com');
 p('');
-p('perinatology.com refuses headless browsers (Incapsula "Request unsuccessful", 2026-09-28), so these are');
-p('for Andrew to type into its Hadlock fetal weight percentile calculator by hand. The answer also shows which');
-p('spread that site uses: at each exact Table 1 cutoff weight, `table` gives the 10th/3rd, `pct127` about the');
-p('9th/2.5th, and `log012` about the 6th/0.8th.');
+p('perinatology.com refuses headless browsers (Incapsula "Request unsuccessful", 2026-09-28), so Andrew');
+p('typed these into its Fetal Biometry 5.0 calculator by hand (EFW entered directly), without being told');
+p('the expected answers. The answers also show which spread that site uses: at each exact Table 1 cutoff');
+p('weight, `table` gives the 10th/3rd, `pct127` about the 9th/2.4th, and `log012` about the 6th/0.8th.');
+p('');
+p(results.perinatology
+  ? `**Result: all ${peri.length} match the app's \`table\` method to the site's one decimal.** By contrast, \`pct127\` and \`pct13\` disagree with the site on 5 of the 6 rows (they agree only at the 50th), and \`log012\` on all 6.`
+  : '**Result: not all rows match the `table` method; see below.**');
 p('');
 p('| GA | EFW (g) | Table 1 says | App `table` | App `pct127` | App `log012` | App `pct13` | perinatology.com |');
 p('|---|---|---|---|---|---|---|---|');
-// Inputs sent to Andrew 2026-09-29 without the expected answers (a blind check).
-const peri = [[30, 0, 1294, '10th'], [30, 0, 1169, '3rd'], [40, 0, 3004, '10th'], [36, 0, 2813, '50th'],
-  [28, 3, 1000, '-'], [34, 0, 2000, '-']];
-const periSite = {}; // filled in from Andrew's report: key 'wk-d-g' -> text shown by perinatology.com
 for (const [wk, d, g, says] of peri) {
   const v = k => f1(C.hadlockPercentile(g, wk + d / 7, k));
   p(`| ${wk}w ${d}d | ${g} | ${says} | ${v('table')} | ${v('pct127')} | ${v('log012')} | ${v('pct13')} | ${periSite[`${wk}-${d}-${g}`] ?? '_to fill in_'} |`);
@@ -240,7 +254,7 @@ for (const [wk, d, g, says] of peri) {
 p('');
 
 fs.writeFileSync(path.join(root, 'VALIDATION.md'), out.join('\n') + '\n');
-allPass = results.hadlockMedian && results.acog && results.format && results.acharya &&
+allPass = results.hadlockMedian && results.acog && results.format && results.acharya && results.perinatology !== false &&
   (C.HADLOCK_METHOD ? results.hadlockSpread : true);
 console.log(JSON.stringify(results));
 console.log(allPass && C.HADLOCK_METHOD && C.ACHARYA_SIGNED_OFF ? 'ALL PASS' : 'NOT READY TO RELEASE (see VALIDATION.md)');
