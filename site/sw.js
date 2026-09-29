@@ -1,7 +1,7 @@
 // Offline cache for the app shell. Bump VERSION on every release so phones pick up changes.
-const VERSION = 'fetal-calc-v0.0.2';
+const VERSION = 'fetal-calc-v0.1.0';
 const FILES = [
-  './', 'index.html', 'manifest.webmanifest',
+  './', 'index.html', 'app.css', 'app.js', 'calc.js', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png',
   'icons/icon-512-maskable.png', 'icons/apple-touch-icon.png'
 ];

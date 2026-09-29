@@ -1,8 +1,8 @@
 # Plan: screens and flow
 
-> **REVISED 2026-09-29 from Andrew's answers in `QUESTIONS.md`. Waiting for his go-ahead.**
-> No clinical code is written until he approves. Items marked *(proposal)* are my suggestions
-> for details the questions didn't cover; approve or change them.
+> **APPROVED 2026-09-29, 07:39 CDT (turn 3): "Okay you can go ahead and get started."** The
+> *(proposal)* items were built as written; he gave the go-ahead after reading them. Smaller
+> calls made while building are listed in `SIGN-OFF.md` for him to confirm.
 
 ## Who and where
 

@@ -1,0 +1,11 @@
+{
+  "name": "fetal-calc",
+  "private": true,
+  "type": "module",
+  "description": "Fetal %ile: EFW and umbilical artery S/D percentiles. No dependencies.",
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\"",
+    "validate": "node validation/validate.mjs",
+    "serve": "python3 -m http.server -d site 8000"
+  }
+}

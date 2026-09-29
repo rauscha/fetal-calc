@@ -2,17 +2,17 @@
 
 | | |
 |---|---|
-| **Turns** | 2 |
-| **Claude working time** | 0 h 16 m 35 s, by `date` (turn 1: 4 m 22 s; turn 2: 12 m 13 s, which includes the time Andrew spent answering 5 question blocks) |
-| **Wall-clock since turn 1** | 8 h 51 m (2026-09-28 22:45:45 → 2026-09-29 07:37 CDT; he slept in between) |
+| **Turns** | 3 |
+| **Claude working time** | 29 m 45 s, by `date` (turn 1: 4 m 22 s; turn 2: 12 m 13 s incl. Andrew's answering; turn 3: 13 m 10 s) |
+| **Wall-clock since turn 1** | 9 h 07 m (2026-09-28 22:45:45 → 2026-09-29 07:52:59 CDT; he slept in between) |
 | **Live URL** | https://fetal-calc.netlify.app (placeholder, no clinical content) |
 
 **Where things stand**
-1. All 19 questions answered (`QUESTIONS.md`); one conflict (Q9 vs Q10) caught and clarified.
-2. `PLAN.md` revised from the answers: **waiting for Andrew's go-ahead** before any clinical code.
-3. App renamed **Fetal %ile**; new icon (bigger curves on a faint chart grid) is live.
-4. GitHub → Netlify auto-deploy still needs Andrew's browser step (`MORNING.md`); deploys go through the connector until then.
-5. perinatology.com blocks headless browsers; the second check will be inputs for Andrew to try.
+1. Calculator built on branch `calculator` (draft PR #1): one screen, GA by weeks + days or EDD, EFW and S/D percentiles, About.
+2. Math checked against the papers (`VALIDATION.md`): Hadlock median exact at 31/31 weeks; ACOG dates pass; **two stops** for Andrew (`SIGN-OFF.md`).
+3. Stop 1: Hadlock's paper gives three different SDs; only the one implied by Table 1 reproduces it. Stop 2: Acharya Table IV rows 19 and 21 sit 0.6–0.8% off its own formula.
+4. Both percentiles show "on hold" in the real build until he decides; production is still the placeholder.
+5. Waiting on him: the two decisions, the Netlify–GitHub link, and six inputs to try on perinatology.com.
 
 ## Questions
 
@@ -86,3 +86,54 @@ by tapping, and the options show you decisions you might not have known you had 
 each other; catching that before code is cheap, and after code it's a bug.
 
 **Tip:** Check an icon at the size it'll really appear (32–48 px) and in grayscale, not just full size.
+
+---
+
+## Turn 3 — 2026-09-29, 07:39:49 → 07:52:59 CDT (13 m 10 s)
+
+**Asked:** Go ahead and start building; he'll do the Netlify–GitHub link later today. Keep working
+until I can't, and he'll correct things when I'm done. He approved the new icon.
+
+**Did:** Opened the three papers for the first time. Read Hadlock's equation and Table 1 off the page
+images (the PDF is a scan) and Acharya's S/D formula and Table IV (signs confirmed on the image),
+plus ACOG's 280-day rule. Wrote the math as one small file (`site/calc.js`) and a validator that runs
+that same file against every published value and writes `VALIDATION.md`.
+
+The check found **two mismatches, and the work stopped at both, as Andrew's rules require**:
+- **Hadlock:** the median matches Table 1 exactly at all 31 weeks, but the paper states the spread
+  three ways (12.7%, 13%, and 0.12 on the log scale). None of them reproduces Table 1, which is
+  exactly ±17%/±25% of the median. Depending on the choice, a baby at the table's own 10th percentile
+  reads as the 10th, 9th or 6th. Also found a misprint: the 30-week 97th is printed 1,649 g (should
+  be about 1,949 g).
+- **Acharya:** 189 of 207 table cells match the formula to within 0.01; weeks 19 and 21 are
+  0.6–0.8% off while their neighbours match.
+
+Kept building everything that doesn't depend on those answers: the calculator screen, the About
+screen, the colorblind-safe result display (number, ▼/▲ words, hatched position bar), the
+extrapolation flag, the EDD date math, and 8 automated tests. Both percentiles are gated to show
+"on hold" until he signs off. Moved the work to a branch + draft PR so nothing clinical can reach
+the public site by accident once Netlify auto-deploys `main`. Wrote `SIGN-OFF.md` with options and
+recommendations, and made a preview image with the gates switched on in a scratch copy only.
+
+Along the way I also:
+- replaced two blocks of math constants I'd typed from memory (normal-distribution helpers) with
+  methods that need none, and checked them against Python's to 1e-14;
+- fixed a CSS edit that wiped two color variables;
+- caught a display edge case where "3.000th" could sit beside "Below the 3rd".
+
+**Changed:** branch `calculator`: `site/calc.js`, `site/app.js`, `site/app.css`, `site/index.html`
+(calculator + About), `site/sw.js` (v0.1.0), `validation/` (transcribed tables + validator),
+`VALIDATION.md`, `SIGN-OFF.md`, `tests/calc.test.mjs`, `package.json`, `PLAN.md` (approved),
+`CLAUDE.md`, `README.md`, this log. Draft PR opened. Production unchanged (placeholder v0.0.2).
+
+**Tip:** Decide *before* building what happens if the check fails ("stop and show me"). When a
+mismatch turned up, there was no temptation to paper over it; the rule was already written.
+
+**Tip:** Make the app's own code the thing that gets checked. The validator imports the same file
+the phone runs, so a passing report means the app is right, not a copy of it.
+
+**Tip:** Read numbers off the page image, not the PDF's text layer. The text layer here had dropped
+every minus sign from the formulas.
+
+**Tip:** Keep unapproved work off the branch that auto-publishes. A branch + PR gives you a
+preview link without risking the live site.
