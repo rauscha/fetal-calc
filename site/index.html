@@ -59,9 +59,9 @@
 
     <fieldset class="card">
       <legend>Abdominal circumference</legend>
-      <p class="src">Hadlock (reference pending)</p>
+      <p class="src">Hadlock 1984</p>
       <label class="field wide">AC (mm)
-        <input id="ac" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off">
+        <input id="ac" type="text" inputmode="decimal" maxlength="5" autocomplete="off">
       </label>
       <div class="result" id="ac-result" aria-live="polite"></div>
     </fieldset>
@@ -87,7 +87,7 @@
 
     <footer>
       <p class="verify">Clinical decision support. Verify against your ultrasound report and clinical judgment.</p>
-      <p>Nothing you enter is stored or sent. Version <span class="ver">1.1.0</span></p>
+      <p>Nothing you enter is stored or sent. Version <span class="ver">1.2.0</span></p>
     </footer>
   </section>
 
@@ -104,8 +104,11 @@
         (GA in weeks). <span id="about-hadlock-method"></span> Source range: 10 to 41 weeks.</p>
 
       <h2>Abdominal circumference percentile</h2>
-      <p>From a Hadlock reference for AC by gestational age. The specific source is pending sign-off; until it
-        is checked against the paper's published values, the app computes no AC percentile.</p>
+      <p>Hadlock FP, Deter RL, Harrist RB, Park SK. Estimating fetal age: computer-assisted analysis of multiple
+        fetal growth parameters. <i>Radiology</i> 1984;152:497&ndash;501.</p>
+      <p>Mean AC from the paper's equation (Table III footnote), AC = &minus;13.3 + 1.61&nbsp;GA &minus;
+        0.00998&nbsp;GA&sup2; cm, with SD 1.34 cm. This is the same calculation used by perinatology.com and by our
+        hospital ultrasound system. Source range: 14 to 42 weeks.</p>
 
       <h2>Umbilical artery S/D percentile</h2>
       <p>Acharya G, Wilsgaard T, Berntsen GK, Maltau JM, Kiserud T. Reference ranges for serial measurements of
@@ -125,7 +128,7 @@
       <p>Every coefficient was taken from the source paper and the app's output was checked against each paper's
         published tables; the comparison is in <code>VALIDATION.md</code> in the project's repository.</p>
       <p>Nothing you enter is stored or sent anywhere. The app works offline once opened.</p>
-      <p class="muted">Version <span class="ver">1.1.0</span></p>
+      <p class="muted">Version <span class="ver">1.2.0</span></p>
     </div>
   </section>
 </main>

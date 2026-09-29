@@ -138,8 +138,10 @@ const acCases = acCaseWeeks.map(wk => {
   const acMm = (mean - 1.2816 * C.HADLOCK_AC.sd) * 10;
   return { wk, acMm, pct: Object.fromEntries(acMethods.map(m => [m, C.acPercentile(acMm, wk, m)])) };
 });
-// Andrew's hospital-system comparison, to be filled in: [GA weeks, GA days, AC mm, hospital system's percentile]
-const hospitalCases = [];
+// Andrew's hospital ultrasound system, 2026-09-29 (reported in session): [GA weeks, GA days, AC mm, percentile shown].
+// The second case was first reported as 329 mm; Andrew confirmed it was a typo for 319 mm.
+const hospitalCases = [[36, 5, 325, 54], [36, 2, 319, 48], [36, 2, 322.6, 58], [40, 0, 368, 89], [40, 0, 358.5, 70]];
+results.acHospital = hospitalCases.every(([wk, d, mm, hosp]) => Math.round(C.acPercentile(mm, wk + d / 7, 'equation')) === hosp);
 
 // ------------------------------------------------------------------------------------------ Write report
 const tick = ok => ok ? 'PASS' : '**FAIL**';
@@ -159,7 +161,7 @@ p(`| Acharya 2005: formula vs Table IV, 23 weeks x 9 percentiles (207 cells), to
 p(`| ACOG CO 700: GA from EDD, ${acogRows.length} hand-worked dates | ${tick(results.acog)} |`);
 p(`| Percentile display rule (never shows a number on the wrong side of a cutoff) | ${tick(results.format)} |`);
 p(`| Second check: perinatology.com, 6 hand-entered cases vs the app's Hadlock method | ${tick(results.perinatology)} |`);
-p(`| Hadlock 1984 AC: Table III printed vs embedded (${tick(results.acTableEmbedded)}); refit constants recomputed (${tick(results.acRefitConstants)}); active method = ${C.AC_SOURCE ? '`' + C.AC_SOURCE + '`' : 'none (Andrew comparing with hospital system)'} | ${C.AC_SOURCE ? 'chosen' : '**ON HOLD**'} |`);
+p(`| Hadlock 1984 AC: Table III printed vs embedded (${tick(results.acTableEmbedded)}); refit constants recomputed (${tick(results.acRefitConstants)}); active method = ${C.AC_SOURCE ? '`' + C.AC_SOURCE + '`' : 'none (Andrew comparing with hospital system)'}${C.AC_SOURCE ? `; matches Andrew's hospital system on ${hospitalCases.length}/${hospitalCases.length} cases` : ''} | ${C.AC_SOURCE ? tick(results.acHospital && results.acTableEmbedded && results.acRefitConstants) : '**ON HOLD**'} |`);
 p('');
 
 p('## 1. Hadlock 1991 (EFW percentile)');
@@ -308,19 +310,22 @@ for (const c of acCases) p(`| ${c.wk}w 0d | ${c.acMm.toFixed(1)} | ${acMethods.m
 p('');
 p('### Hospital system comparison');
 p('');
-p('Andrew\'s hospital ultrasound system, same inputs (to be filled in):');
+p('Andrew\'s hospital ultrasound system (percentile as it displays it, whole numbers). The 36w 2d / 319 mm case');
+p('was first reported as 329 mm; Andrew confirmed that was a typo.');
 p('');
 p(`| GA | AC (mm) | Hospital system | ${acMethods.map(m => '`' + m + '`').join(' | ')} |`);
 p(`|---|---|---|${acMethods.map(() => '---').join('|')}|`);
-for (const [wk, d, mm, hosp] of hospitalCases) p(`| ${wk}w ${d}d | ${mm} | ${hosp} | ${acMethods.map(m => f1(C.acPercentile(mm, wk + d / 7, m))).join(' | ')} |`);
+for (const [wk, d, mm, hosp] of hospitalCases) p(`| ${wk}w ${d}d | ${mm} | ${hosp}% | ${acMethods.map(m => f1(C.acPercentile(mm, wk + d / 7, m))).join(' | ')} |`);
 if (!hospitalCases.length) p('| _to fill in_ | | | | | |');
 p('');
-p(C.AC_SOURCE ? `**Status: method \`${C.AC_SOURCE}\` chosen.**` : '**Status: ON HOLD.** The AC percentile is computed by none of these until Andrew picks a method.');
+p(C.AC_SOURCE
+  ? `**Status: ${results.acHospital ? 'PASS' : '**FAIL**'}.** Andrew chose \`${C.AC_SOURCE}\` on 2026-09-29: it matches his hospital system on all ${hospitalCases.length} cases to the whole percent, and it is the calculation perinatology.com lists. Its gap from the paper's own Table III (up to 0.17 cm, from coefficient rounding) is recorded above as a known discrepancy.`
+  : '**Status: ON HOLD.** The AC percentile is computed by none of these until Andrew picks a method.');
 p('');
 
 fs.writeFileSync(path.join(root, 'VALIDATION.md'), out.join('\n') + '\n');
 allPass = results.hadlockMedian && results.acog && results.format && results.acharya && results.perinatology !== false &&
-  results.acTableEmbedded && results.acRefitConstants &&
+  results.acTableEmbedded && results.acRefitConstants && (C.AC_SOURCE ? results.acHospital : true) &&
   (C.HADLOCK_METHOD ? results.hadlockSpread : true);
 console.log(JSON.stringify(results));
 console.log(allPass && C.HADLOCK_METHOD && C.ACHARYA_SIGNED_OFF && C.AC_SOURCE ? 'ALL PASS' : 'NOT READY TO RELEASE (see VALIDATION.md)');

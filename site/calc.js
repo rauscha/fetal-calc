@@ -158,8 +158,11 @@ export function acharyaSdPercentile(sd, gaWeeks) {
 //              reproduces the table to rounding. Recomputed and checked by validation/validate.mjs.
 // ---------------------------------------------------------------------------------------------
 
-// Chosen by Andrew: one of 'table3' | 'equation' | 'refit'. null = AC percentile "on hold".
-export let AC_SOURCE = null;
+// Chosen by Andrew 2026-09-29: 'equation', the printed footnote quadratic. It matches his hospital
+// ultrasound system (5/5 cases to the whole percent) and perinatology.com. It runs up to 0.17 cm below
+// the paper's own Table III (coefficient rounding); recorded in VALIDATION.md section 6.
+// (null would put the AC percentile "on hold".)
+export let AC_SOURCE = 'equation';
 
 export const HADLOCK_AC = {
   sd: 1.34, // cm, Table III footnote

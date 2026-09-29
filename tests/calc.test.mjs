@@ -68,9 +68,8 @@ test('percentile text never lands on the wrong side of a cutoff', () => {
   }
 });
 
-test('no AC percentile is computed while its Hadlock source is unchosen', () => {
-  assert.equal(C.AC_SOURCE, null);
-  assert.equal(C.acPercentile(250, 30), null);
+test('with no AC method chosen, no AC percentile is computed', () => {
+  assert.equal(C.acPercentile(250, 30, null), null);
 });
 
 test('AC table3 method reproduces every Hadlock 1984 Table III value at the printed half-weeks', () => {
@@ -92,4 +91,11 @@ test('AC refit method reproduces every Table III row within 0.051 cm', () => {
 
 test('AC percentile with no method is null', () => {
   assert.equal(C.acPercentile(300, 34, null), null);
+});
+
+test('AC uses the signed-off printed equation and matches Andrew\'s hospital system', () => {
+  assert.equal(C.AC_SOURCE, 'equation');
+  for (const [w, d, mm, hosp] of [[36, 5, 325, 54], [36, 2, 319, 48], [36, 2, 322.6, 58], [40, 0, 368, 89], [40, 0, 358.5, 70]]) {
+    assert.equal(Math.round(C.acPercentile(mm, w + d / 7)), hosp, `${w}+${d} ${mm} mm`);
+  }
 });

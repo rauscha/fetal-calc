@@ -175,14 +175,14 @@ function update() {
   }
 
   // AC
-  const acRaw = $('ac').value.trim();
+  const acRaw = $('ac').value.trim().replace(',', '.');
   acOut.replaceChildren();
   if (C.AC_SOURCE === null) {
     acOut.append(el('p', 'hold', 'AC percentile is on hold until its Hadlock source is checked.'));
   } else if (acRaw === '' || !ga.days) {
     acOut.append(el('p', 'empty', ga.error ? '' : 'Enter the gestational age and AC.'));
-  } else if (!/^\d+$/.test(acRaw) || +acRaw < AC_MIN || +acRaw > AC_MAX) {
-    acOut.append(el('p', 'msg', `AC must be a whole number of millimetres, ${AC_MIN} to ${AC_MAX}.`));
+  } else if (!/^\d+(\.\d)?$/.test(acRaw) || +acRaw < AC_MIN || +acRaw > AC_MAX) {
+    acOut.append(el('p', 'msg', `AC must be in millimetres (one decimal allowed), ${AC_MIN} to ${AC_MAX}.`));
   } else {
     const pct = C.acPercentile(+acRaw, ga.days / 7);
     const words = pct < 3 ? '\u25BC\u25BC Below the 3rd percentile' : pct < 10 ? '\u25BC Below the 10th percentile' : '';

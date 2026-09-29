@@ -13,7 +13,7 @@ against each paper's published values. Do not edit by hand; re-run after any cha
 | ACOG CO 700: GA from EDD, 9 hand-worked dates | PASS |
 | Percentile display rule (never shows a number on the wrong side of a cutoff) | PASS |
 | Second check: perinatology.com, 6 hand-entered cases vs the app's Hadlock method | PASS |
-| Hadlock 1984 AC: Table III printed vs embedded (PASS); refit constants recomputed (PASS); active method = none (Andrew comparing with hospital system) | **ON HOLD** |
+| Hadlock 1984 AC: Table III printed vs embedded (PASS); refit constants recomputed (PASS); active method = `equation`; matches Andrew's hospital system on 5/5 cases | PASS |
 
 ## 1. Hadlock 1991 (EFW percentile)
 
@@ -199,11 +199,16 @@ Percentile each method gives to an AC exactly at Table III's own 10th percentile
 
 ### Hospital system comparison
 
-Andrew's hospital ultrasound system, same inputs (to be filled in):
+Andrew's hospital ultrasound system (percentile as it displays it, whole numbers). The 36w 2d / 319 mm case
+was first reported as 329 mm; Andrew confirmed that was a typo.
 
 | GA | AC (mm) | Hospital system | `table3` | `equation` | `refit` |
 |---|---|---|---|---|---|
-| _to fill in_ | | | | | |
+| 36w 5d | 325 | 54% | 50.9 | 54.2 | 50.9 |
+| 36w 2d | 319 | 48% | 44.5 | 47.6 | 44.4 |
+| 36w 2d | 322.6 | 58% | 55.2 | 58.3 | 55.1 |
+| 40w 0d | 368 | 89% | 86.9 | 89.3 | 87.6 |
+| 40w 0d | 358.5 | 70% | 65.9 | 70.4 | 67.2 |
 
-**Status: ON HOLD.** The AC percentile is computed by none of these until Andrew picks a method.
+**Status: PASS.** Andrew chose `equation` on 2026-09-29: it matches his hospital system on all 5 cases to the whole percent, and it is the calculation perinatology.com lists. Its gap from the paper's own Table III (up to 0.17 cm, from coefficient rounding) is recorded above as a known discrepancy.
 
