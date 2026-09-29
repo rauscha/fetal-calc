@@ -17,18 +17,12 @@
   were not opened; I only listed their filenames.
 
 ## Needs you
-1. **Answer `QUESTIONS.md`** (inline or by voice). This unblocks everything clinical.
-2. **Approve or change `PLAN.md`.**
-3. **Link Netlify to GitHub (browser, about 2 minutes).** Until then the site updates only when
-   I deploy through the connector, so a push to `main` alone does not deploy yet.
-   1. Open https://app.netlify.com/projects/fetal-calc → **Project configuration** →
-      **Build & deploy** → **Continuous deployment** → **Link repository**.
-   2. Choose **GitHub**, authorize the Netlify app, and give it access to **rauscha/fetal-calc**
-      (it's private, so choose "Only select repositories" and add it).
-   3. Branch **main**. Leave build command empty and publish directory `site` (`netlify.toml`
-      already sets both). Save.
-   4. Tell me when it's done and I'll push a test commit and confirm it deploys by itself.
-4. **perinatology.com second check:** headless Chromium got Incapsula's "Request unsuccessful"
+1. **Answer `QUESTIONS.md`** *(done 2026-09-29)* (inline or by voice). This unblocks everything clinical.
+2. **Approve or change `PLAN.md`.** *(approved 2026-09-29)*
+3. **Link Netlify to GitHub.** *Done 2026-09-29 by Andrew.* (The steps first written here named
+   "Build & deploy"; Netlify has since moved it to **Project configuration → Developer settings →
+   Continuous deployment → Repository → Link repository**.)
+4. **perinatology.com second check** *(done 2026-09-29: 6/6 match, VALIDATION.md §5)*: headless Chromium got Incapsula's "Request unsuccessful"
    page. I stopped there. Once the math exists I'll give you a short list of inputs to try in
    your own browser.
 

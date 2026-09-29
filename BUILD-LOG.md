@@ -183,3 +183,20 @@ docs instead of guessing. Menus get renamed, and the docs say where things moved
 
 **Tip:** Ask Claude to check its own summary sentences against the data. Two small overstatements
 were caught this way before they reached the record.
+
+---
+
+## Turn 6 — 2026-09-29, 13:46:59 → @@END@@ CDT (@@DUR@@)
+
+**Asked:** He's done the Netlify steps; merge it now.
+
+**Did:** Confirmed the link before touching anything: Netlify had built production from `main` by
+itself (commit 837cc84, not a manual deploy), still the placeholder. Labelled this first real release
+1.0.0 (footer and service worker, so installed phones refresh), corrected the stale Netlify steps
+in `MORNING.md`, re-ran the tests (9 pass) and the validator (all pass), then merged PR #1.
+@@RESULT@@
+
+**Changed:** `site/index.html`, `site/sw.js` (v1.0.0), `MORNING.md`, this log. PR #1 merged to `main`.
+
+**Tip:** Before you say "it's deployed", check what the live URL actually serves. A green merge only
+means the code moved; fetching the page proves the right version is live.
