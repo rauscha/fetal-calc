@@ -7,7 +7,7 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 
 // Hard sanity limits on input (not reference ranges): outside these nothing is computed.
 const GA_MIN_DAYS = 8 * 7, GA_MAX_DAYS = 44 * 7 + 6;
-const EFW_MAX = 7000, SD_MAX = 50;
+const EFW_MAX = 7000, SD_MAX = 50, AC_MIN = 50, AC_MAX = 450;
 
 // ------------------------------------------------------------------ screens
 function show() {
@@ -91,7 +91,7 @@ function readGa() {
 // and 10th are spread apart. Beyond each cutoff the track is hatched (texture, not color); beyond
 // the 3rd it is cross-hatched. The marker is a solid triangle with a vertical line.
 function bar({ pct, ticks, lower = [], upper = [] }) {
-  const W = 320, H = 64, L = 12, R = W - 12, trackY = 22, trackH = 14;
+  const W = 320, H = 54, L = 12, R = W - 12, trackY = 17, trackH = 13;
   const zMin = C.normInv(0.005), zMax = C.normInv(0.995);
   const x = p => {
     const z = C.normInv(Math.min(Math.max(p, 0.005), 99.995) / 100);
@@ -156,7 +156,7 @@ function render(target, { label, pct, lower = [], upper = [], ticks, words, rang
 
 function update() {
   const ga = readGa();
-  const efwOut = $('efw-result'), sdOut = $('sd-result');
+  const efwOut = $('efw-result'), acOut = $('ac-result'), sdOut = $('sd-result');
 
   // EFW
   const efwRaw = $('efw').value.trim();
@@ -172,6 +172,22 @@ function update() {
     const words = pct < 3 ? '▼▼ Below the 3rd percentile' : pct < 10 ? '▼ Below the 10th percentile' : '';
     render(efwOut, { label: 'EFW', pct, lower: [3, 10], ticks: [3, 10, 50], words,
       range: C.HADLOCK.range, gaDays: ga.days });
+  }
+
+  // AC
+  const acRaw = $('ac').value.trim();
+  acOut.replaceChildren();
+  if (C.AC_SOURCE === null) {
+    acOut.append(el('p', 'hold', 'AC percentile is on hold until its Hadlock source is checked.'));
+  } else if (acRaw === '' || !ga.days) {
+    acOut.append(el('p', 'empty', ga.error ? '' : 'Enter the gestational age and AC.'));
+  } else if (!/^\d+$/.test(acRaw) || +acRaw < AC_MIN || +acRaw > AC_MAX) {
+    acOut.append(el('p', 'msg', `AC must be a whole number of millimetres, ${AC_MIN} to ${AC_MAX}.`));
+  } else {
+    const pct = C.acPercentile(+acRaw, ga.days / 7);
+    const words = pct < 3 ? '\u25BC\u25BC Below the 3rd percentile' : pct < 10 ? '\u25BC Below the 10th percentile' : '';
+    render(acOut, { label: 'AC', pct, lower: [3, 10], ticks: [3, 10, 50], words,
+      range: C.HADLOCK_AC.range, gaDays: ga.days });
   }
 
   // S/D
@@ -193,9 +209,9 @@ function update() {
 
 // ------------------------------------------------------------------ wiring
 document.querySelectorAll('input[name="gamode"]').forEach(r => r.addEventListener('change', () => { applyMode(); update(); }));
-['ga-w', 'ga-d', 'edd', 'scan', 'efw', 'sd'].forEach(id => $(id).addEventListener('input', update));
+['ga-w', 'ga-d', 'edd', 'scan', 'efw', 'ac', 'sd'].forEach(id => $(id).addEventListener('input', update));
 $('clear').addEventListener('click', () => {
-  ['ga-w', 'ga-d', 'edd', 'efw', 'sd'].forEach(id => { $(id).value = ''; });
+  ['ga-w', 'ga-d', 'edd', 'efw', 'ac', 'sd'].forEach(id => { $(id).value = ''; });
   $('scan').value = todayIso();
   update();
   $(mode() === 'wd' ? 'ga-w' : 'edd').focus();

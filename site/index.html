@@ -58,6 +58,15 @@
     </fieldset>
 
     <fieldset class="card">
+      <legend>Abdominal circumference</legend>
+      <p class="src">Hadlock (reference pending)</p>
+      <label class="field wide">AC (mm)
+        <input id="ac" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off">
+      </label>
+      <div class="result" id="ac-result" aria-live="polite"></div>
+    </fieldset>
+
+    <fieldset class="card">
       <legend>Umbilical artery S/D</legend>
       <p class="src">Acharya 2005, free loop</p>
       <label class="field wide">S/D ratio
@@ -93,6 +102,10 @@
         standard. <i>Radiology</i> 1991;181:129&ndash;133.</p>
       <p>Median weight from the paper's equation, ln(weight) = 0.578 + 0.332&nbsp;GA &minus; 0.00354&nbsp;GA&sup2;
         (GA in weeks). <span id="about-hadlock-method"></span> Source range: 10 to 41 weeks.</p>
+
+      <h2>Abdominal circumference percentile</h2>
+      <p>From a Hadlock reference for AC by gestational age. The specific source is pending sign-off; until it
+        is checked against the paper's published values, the app computes no AC percentile.</p>
 
       <h2>Umbilical artery S/D percentile</h2>
       <p>Acharya G, Wilsgaard T, Berntsen GK, Maltau JM, Kiserud T. Reference ranges for serial measurements of

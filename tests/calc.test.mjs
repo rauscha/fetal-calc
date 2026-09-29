@@ -67,3 +67,8 @@ test('percentile text never lands on the wrong side of a cutoff', () => {
     assert.equal(p > 95, shown > 95, `p=${p}`);
   }
 });
+
+test('no AC percentile is computed while its Hadlock source is unchosen', () => {
+  assert.equal(C.AC_SOURCE, null);
+  assert.equal(C.acPercentile(250, 30), null);
+});

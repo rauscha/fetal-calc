@@ -13,6 +13,7 @@ against each paper's published values. Do not edit by hand; re-run after any cha
 | ACOG CO 700: GA from EDD, 9 hand-worked dates | PASS |
 | Percentile display rule (never shows a number on the wrong side of a cutoff) | PASS |
 | Second check: perinatology.com, 6 hand-entered cases vs the app's Hadlock method | PASS |
+| AC (Hadlock): source not chosen | **ON HOLD** |
 
 ## 1. Hadlock 1991 (EFW percentile)
 

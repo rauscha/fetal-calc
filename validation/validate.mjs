@@ -127,6 +127,7 @@ p(`| Acharya 2005: formula vs Table IV, 23 weeks x 9 percentiles (207 cells), to
 p(`| ACOG CO 700: GA from EDD, ${acogRows.length} hand-worked dates | ${tick(results.acog)} |`);
 p(`| Percentile display rule (never shows a number on the wrong side of a cutoff) | ${tick(results.format)} |`);
 p(`| Second check: perinatology.com, 6 hand-entered cases vs the app's Hadlock method | ${tick(results.perinatology)} |`);
+p(`| AC (Hadlock): ${C.AC_SOURCE ? 'source `' + C.AC_SOURCE + '`' : 'source not chosen'} | ${C.AC_SOURCE ? '(checks pending)' : '**ON HOLD**'} |`);
 p('');
 
 p('## 1. Hadlock 1991 (EFW percentile)');
@@ -257,5 +258,5 @@ fs.writeFileSync(path.join(root, 'VALIDATION.md'), out.join('\n') + '\n');
 allPass = results.hadlockMedian && results.acog && results.format && results.acharya && results.perinatology !== false &&
   (C.HADLOCK_METHOD ? results.hadlockSpread : true);
 console.log(JSON.stringify(results));
-console.log(allPass && C.HADLOCK_METHOD && C.ACHARYA_SIGNED_OFF ? 'ALL PASS' : 'NOT READY TO RELEASE (see VALIDATION.md)');
-process.exit(allPass && C.HADLOCK_METHOD && C.ACHARYA_SIGNED_OFF ? 0 : 1);
+console.log(allPass && C.HADLOCK_METHOD && C.ACHARYA_SIGNED_OFF && C.AC_SOURCE ? 'ALL PASS' : 'NOT READY TO RELEASE (see VALIDATION.md)');
+process.exit(allPass && C.HADLOCK_METHOD && C.ACHARYA_SIGNED_OFF && C.AC_SOURCE ? 0 : 1);

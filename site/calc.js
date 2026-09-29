@@ -141,6 +141,23 @@ export function acharyaSdPercentile(sd, gaWeeks) {
 }
 
 // ---------------------------------------------------------------------------------------------
+// Abdominal circumference (AC) percentile, Hadlock. The source paper has NOT been chosen or read
+// yet (Andrew, 2026-09-29: match the Hadlock AC reference perinatology.com uses). No coefficients
+// live here until they are read from that paper's PDF and checked against its published values.
+// ---------------------------------------------------------------------------------------------
+
+// Chosen by Andrew once the source is confirmed. null = AC percentile "on hold": nothing computed.
+export let AC_SOURCE = null;
+
+// Placeholder: filled in from the chosen paper (citation, coefficients, range in weeks).
+export const HADLOCK_AC = { source: null, range: null };
+
+export function acPercentile(acMm, gaWeeks) {
+  if (AC_SOURCE === null) return null;
+  return null; // unreachable until the source's math is added and validated
+}
+
+// ---------------------------------------------------------------------------------------------
 // ACOG Committee Opinion No. 700: Methods for Estimating the Due Date. Obstet Gynecol
 // 2017;129:e150-4. p. e150: "By convention, the EDD is 280 days after the first day of the LMP."
 // So on any date, GA (days) = 280 - (EDD - date).
