@@ -1,17 +1,21 @@
 # fetal-calc — build log
 
+> **Tracked build complete: 2026-09-29, 14:04:46 CDT (turn 7).** Andrew ended the turn-by-turn record
+> here. Later work (Friday's dedication-line rehearsal, the report to the slide deck) is not logged.
+
 | | |
 |---|---|
-| **Turns** | 6 |
-| **Claude working time** | 38 m 11 s, by `date` (turn 1: 4 m 22 s; turn 2: 12 m 13 s incl. Andrew's answering; turn 3: 13 m 10 s; turn 4: 1 m 12 s; turn 5: 1 m 36 s; turn 6: 5 m 38 s) |
-| **Wall-clock since turn 1** | 15 h 06 m (2026-09-28 22:45:45 → 2026-09-29 13:52:37 CDT) |
+| **Turns** | 7 |
+| **Claude working time** | **≈ 38 min** (transcript: 35 m 36 s over turns 1–6, plus about 3 min in turn 7). By `date` in each turn: 39 m 38 s. See "Time check" below. |
+| **Andrew's answering time inside turns** | 9 m 01 s (the five question blocks in turn 2, plus one choice in turn 6) |
+| **Wall-clock since turn 1** | 15 h 19 m (2026-09-28 22:45:36 → 2026-09-29 14:04:46 CDT; he slept overnight and worked in between) |
 | **Live URL** | **https://fetal-calc.netlify.app**: Fetal %ile 1.0.0, live since 2026-09-29 13:51 CDT |
 
 **Where things stand**
-1. **The app is live** (v1.0.0). Every validation check passes, including a blind perinatology.com check (6/6).
-2. A push to `main` now publishes the site by itself. The repo is public, which Netlify's free plan requires for that.
-3. One open item: switch off Netlify's "Powered by Netlify" badge, which covers the footer's verify line.
-4. Next: rehearse Friday's live change (the dedication line), and pick highlights from this log for the slide.
+1. **The app is live** (v1.0.0), installable and offline. Every validation check passes, including a blind perinatology.com check (6/6).
+2. A push to `main` publishes the site automatically, in about 5 seconds. The repo is public, which Netlify's free plan requires for that.
+3. The Netlify badge is off; the footer's verify line is clear.
+4. Next, not logged: rehearse Friday's dedication line, and send highlights from this log to the deck session.
 
 ## Questions
 
@@ -221,3 +225,49 @@ plan rule nobody had mentioned, and it surfaced on a preview, not on the live si
 
 **Tip:** Before you say "it's deployed", check what the live URL actually serves. A green merge only
 means the code moved; fetching the page proves the right version is live.
+
+---
+
+## Turn 7 — 2026-09-29, 14:03:19 → 14:04:46 CDT (1 m 27 s)
+
+**Asked:** He turned the Netlify badge off. Send a screenshot of the live app, and that concludes the
+tracked portion: stop the timer and the turn-by-turn record. Separately, afterwards: the dedication
+line change and a report of what we did for Friday's slide deck.
+
+**Did:** Confirmed the badge script is gone from the live page. Took two screenshots of the **live**
+site with values typed into it: 30w 0d / 1,200 g / S/D 4.3 (4th, "▼ Below the 10th"; 97th, "▲ Above
+the 95th") in light mode, and 34w 2d / 2,150 g / S/D 2.6 (19th; 56th) in dark mode. Drove the
+installed headless browser directly over its debugging protocol, so the images show the live code,
+not a local copy. Sent both to his phone. Checked the time totals against this session's transcript
+(below) and closed the log.
+
+**Changed:** this log. (No app change.)
+
+**Tip:** Close a build with a picture of the real thing, taken from the live address. It's the
+simplest proof that what was approved is what people will get.
+
+## Time check: `date` vs the session transcript
+
+At the kickoff's request, each turn's `date` stamps were compared with the transcript's own
+timestamps (from Andrew's prompt to Claude's last message in that turn). Answering time is the
+time Andrew spent on Claude's multiple-choice questions inside a turn.
+
+| Turn | Transcript span | of which Andrew answering | Claude working (transcript) | Claude working (`date`) |
+|---|---|---|---|---|
+| 1 | 4 m 55 s | 0 | 4 m 55 s | 4 m 22 s |
+| 2 | 12 m 53 s | 8 m 52 s | 4 m 01 s | 12 m 13 s (included his answering) |
+| 3 | 14 m 03 s | 0 | 14 m 03 s | 13 m 10 s |
+| 4 | 1 m 43 s | 0 | 1 m 43 s | 1 m 12 s |
+| 5 | 1 m 53 s | 0 | 1 m 53 s | 1 m 36 s |
+| 6 | 8 m 02 s | 0 m 09 s | 7 m 53 s | 5 m 38 s |
+| 7 | about 3 min | 0 | about 3 min | 1 m 27 s |
+| **Total** | **≈ 47 min** | **9 m 01 s** | **≈ 38 min** | 39 m 38 s |
+
+- The two agree to within seconds on most turns. The transcript runs a little longer because `date`
+  was run a few seconds after each prompt and before the final reply and commit. In turn 6 the
+  deploy checks came after the end stamp, hence the 2½-minute gap.
+- The real correction is turn 2: two-thirds of it was Andrew answering questions. Claude's own
+  working time for the whole build is about **38 minutes**. Andrew spent about 9 minutes answering
+  questions in-session, plus his own offline steps (reading, the Netlify link, perinatology.com).
+- Wall-clock from the first prompt to the live app: 15 h 05 m (22:45 to 13:51 the next day),
+  almost all of it overnight or between sessions.
