@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fetal Calc</title>
+<meta name="description" content="Fetal growth and Doppler percentile calculator (in development).">
+<meta name="theme-color" content="#1f2a44">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Fetal Calc">
+<style>
+  :root {
+    --bg: #f7f7f5; --surface: #ffffff; --ink: #1a1a1a; --muted: #555; --line: #c9c9c4;
+    --accent: #1f2a44;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121417; --surface: #1c1f24; --ink: #f0f0ee; --muted: #b0b0aa; --line: #3a3e45;
+            --accent: #dfe6f5; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 17px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 32rem; margin: 0 auto; padding: max(16px, env(safe-area-inset-top)) 16px 32px; }
+  header { display: flex; align-items: center; gap: 12px; margin: 8px 0 20px; }
+  header h1 { font-size: 1.35rem; margin: 0; }
+  a.back { color: var(--ink); text-decoration: none; font-weight: 600; }
+  .tile { display: block; width: 100%; padding: 18px 16px; margin: 0 0 12px; border: 2px solid var(--line);
+    border-radius: 12px; background: var(--surface); color: var(--ink); text-decoration: none;
+    font-size: 1.1rem; font-weight: 600; }
+  .tile small { display: block; font-weight: 400; color: var(--muted); font-size: .9rem; }
+  .notice { border: 2px dashed var(--line); border-radius: 12px; padding: 16px; background: var(--surface); }
+  .notice strong { display: block; margin-bottom: 4px; }
+  footer { margin-top: 28px; color: var(--muted); font-size: .85rem; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <!-- Placeholder shell. No clinical math, coefficients or reference values live here yet:
+       those wait for Andrew's answers in QUESTIONS.md and approval of PLAN.md. -->
+
+  <section id="home" data-screen>
+    <header><h1>Fetal Calc</h1></header>
+    <div class="notice" role="note"><strong>Under construction.</strong>
+      This app is being built. It does not calculate anything yet.</div>
+    <p></p>
+    <a class="tile" href="#efw">Fetal weight percentile <small>Coming soon</small></a>
+    <a class="tile" href="#doppler">Umbilical artery Doppler percentile <small>Coming soon</small></a>
+    <a class="tile" href="#about">About <small>Sources and version</small></a>
+  </section>
+
+  <section id="efw" data-screen hidden>
+    <header><a class="back" href="#home" aria-label="Back">&larr;</a><h1>Fetal weight percentile</h1></header>
+    <div class="notice" role="note"><strong>Coming soon.</strong> This screen is a placeholder.</div>
+  </section>
+
+  <section id="doppler" data-screen hidden>
+    <header><a class="back" href="#home" aria-label="Back">&larr;</a><h1>Umbilical artery Doppler percentile</h1></header>
+    <div class="notice" role="note"><strong>Coming soon.</strong> This screen is a placeholder.</div>
+  </section>
+
+  <section id="about" data-screen hidden>
+    <header><a class="back" href="#home" aria-label="Back">&larr;</a><h1>About</h1></header>
+    <p>Sources will be listed here once they are chosen and checked.</p>
+    <p>Nothing you type is stored or sent anywhere.</p>
+  </section>
+
+  <footer>Version <span id="ver">0.0.1</span> &middot; placeholder build</footer>
+</main>
+<script>
+  function show() {
+    var id = (location.hash || '#home').slice(1);
+    var screens = document.querySelectorAll('[data-screen]');
+    var found = false;
+    screens.forEach(function (s) { var on = s.id === id; s.hidden = !on; if (on) found = true; });
+    if (!found) document.getElementById('home').hidden = false;
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', show);
+  show();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>

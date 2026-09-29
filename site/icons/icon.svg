@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#1f2a44"/>
+  <!-- percentile curves: three rising lines of different weight -->
+  <path d="M96 400 C 200 380, 300 300, 416 150" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round"/>
+  <path d="M96 420 C 210 410, 320 350, 416 250" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-dasharray="4 24" opacity=".9"/>
+  <path d="M96 380 C 190 350, 280 250, 416 80" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-dasharray="4 24" opacity=".9"/>
+</svg>

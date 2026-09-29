@@ -1,0 +1,5 @@
+# Never commit source papers.
+*.pdf
+.netlify/
+node_modules/
+.DS_Store
