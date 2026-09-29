@@ -193,10 +193,22 @@ were caught this way before they reached the record.
 **Did:** Confirmed the link before touching anything: Netlify had built production from `main` by
 itself (commit 837cc84, not a manual deploy), still the placeholder. Labelled this first real release
 1.0.0 (footer and service worker, so installed phones refresh), corrected the stale Netlify steps
-in `MORNING.md`, re-ran the tests (9 pass) and the validator (all pass), then merged PR #1.
+in `MORNING.md`, re-ran the tests (9 pass) and the validator (all pass), and went to merge.
+
+The merge was refused while a check ran, and the check was Netlify's new deploy preview: **failed,
+"Build blocked: Unrecognized Git contributor. This plan allows only verified account members to push
+to private repos."** Netlify's free plan only builds private repos for verified contributors, and his
+Netlify login has no GitHub account connected. Scanned the whole history before going public (no
+PDFs, no credentials, no addresses; his email is on the commits; the two tables are transcribed as
+numbers). He chose to make the repo public now (his Q17 plan, and the math is validated), which also
+keeps Friday's commit from the phone's cloud session from being blocked. Made it public, then pushed
+this log update to re-run the preview.
 @@RESULT@@
 
 **Changed:** `site/index.html`, `site/sw.js` (v1.0.0), `MORNING.md`, this log. PR #1 merged to `main`.
+
+**Tip:** Watch the first automatic deploy instead of assuming it works. This one was blocked by a
+plan rule nobody had mentioned, and it surfaced on a preview, not on the live site.
 
 **Tip:** Before you say "it's deployed", check what the live URL actually serves. A green merge only
 means the code moved; fetching the page proves the right version is live.
