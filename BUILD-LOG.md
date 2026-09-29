@@ -6,11 +6,12 @@
 
 | | |
 |---|---|
-| **Turns** | 7 |
-| **Claude working time** | **≈ 38 min** (transcript: 35 m 36 s over turns 1–6, plus about 3 min in turn 7). By `date` in each turn: 39 m 38 s. See "Time check" below. |
+| **Turns** | 8 (turn 8 = the AC fix, tracked separately) |
+| **Claude working time, original build (turns 1–7)** | **≈ 38 min** (transcript: 35 m 36 s over turns 1–6, plus about 3 min in turn 7). By `date` in each turn: 39 m 38 s. See "Time check" below. |
 | **Andrew's answering time inside turns** | 9 m 01 s (the five question blocks in turn 2, plus one choice in turn 6) |
 | **Wall-clock since turn 1** | 15 h 19 m (2026-09-28 22:45:36 → 2026-09-29 14:04:46 CDT; he slept overnight and worked in between) |
-| **Live URL** | **https://fetal-calc.netlify.app**: Fetal %ile 1.0.0, live since 2026-09-29 13:51 CDT |
+| **Live URL** | **https://fetal-calc.netlify.app**: Fetal %ile 1.2.0 (EFW, AC, S/D), first live 2026-09-29 13:51 CDT; AC added 16:06 |
+| **Turn 8 (AC fix)** | request 15:00 to live 16:06 (66 min on the clock); about 11 min of Claude working time |
 
 **Where things stand**
 1. **The app is live** (v1.0.0), installable and offline. Every validation check passes, including a blind perinatology.com check (6/6).
@@ -275,7 +276,7 @@ time Andrew spent on Claude's multiple-choice questions inside a turn.
 
 ---
 
-## Turn 8 (tracking resumed) — 2026-09-29, 15:00:36 → @@END@@ CDT (@@DUR@@)
+## Turn 8 (tracking resumed) — 2026-09-29, 15:00:36 → 16:06:45 CDT (66 min on the clock; about 11 min of Claude working time)
 
 **Asked:** "I totally forgot an important part, my colleague just pointed it out. Restart the timer."
 The app needs EFW *and* AC (both can diagnose FGR); neither required, both available; AC also by
@@ -298,7 +299,15 @@ into Claude, and X minutes later, the fix was live on the app."
   329; Andrew confirmed a typo. So 5/5 match. Andrew chose the printed equation, so the app agrees with
   both his hospital system and perinatology.com; the gap from Table III is recorded.
 - Switched AC on, allowed one decimal in AC (the hospital reports 322.6 mm), 15 tests pass, validation
-  passes, version 1.2.0; screenshot-checked; @@RESULT@@
+  passes, version 1.2.0; screenshot-checked; showed Andrew the result and a preview link, and on his "go" merged PR #2.
+  **Live at 16:06:45**, version 1.2.0; the code downloaded from the live site reproduces all five
+  hospital-system AC percentiles.
+
+**Time for this turn** (from the transcript's timestamps): request 15:00:17 to live 16:06:45 is
+**66 minutes on the clock**. **Claude's working time: about 11 minutes**, plus about 3 minutes of
+background helpers running in parallel while Andrew checked things. The rest, about 55 minutes, was
+Andrew's side: about 35 minutes before he answered the which-paper question, then finding
+perinatology.com's reference, sending the PDF, and pulling five cases from the hospital system.
 
 **Changed:** `site/calc.js` (Hadlock 1984 AC: printed equation, Table III, refit; `AC_SOURCE = 'equation'`),
 `site/app.js`, `site/index.html` (AC card, About), `site/app.css` (compact), `site/sw.js` (1.2.0),
