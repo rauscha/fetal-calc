@@ -2,15 +2,16 @@
 
 | | |
 |---|---|
-| **Turns** | 5 |
-| **Claude working time** | 32 m 33 s, by `date` (turn 1: 4 m 22 s; turn 2: 12 m 13 s incl. Andrew's answering; turn 3: 13 m 10 s; turn 4: 1 m 12 s; turn 5: 1 m 36 s) |
-| **Wall-clock since turn 1** | 14 h 58 m (2026-09-28 22:45:45 → 2026-09-29 13:44:17 CDT) |
-| **Live URL** | https://fetal-calc.netlify.app (placeholder, no clinical content) |
+| **Turns** | 6 |
+| **Claude working time** | 38 m 11 s, by `date` (turn 1: 4 m 22 s; turn 2: 12 m 13 s incl. Andrew's answering; turn 3: 13 m 10 s; turn 4: 1 m 12 s; turn 5: 1 m 36 s; turn 6: 5 m 38 s) |
+| **Wall-clock since turn 1** | 15 h 06 m (2026-09-28 22:45:45 → 2026-09-29 13:52:37 CDT) |
+| **Live URL** | **https://fetal-calc.netlify.app**: Fetal %ile 1.0.0, live since 2026-09-29 13:51 CDT |
 
 **Where things stand**
-1. Calculator on PR #1, ready for review: every validation check passes, including a blind perinatology.com check (6/6 match).
-2. Next: Andrew links Netlify to GitHub (Developer settings → Continuous deployment → Link repository).
-3. Then: confirm auto-deploy, and on his word merge PR #1 so the real app goes live at the fixed URL.
+1. **The app is live** (v1.0.0). Every validation check passes, including a blind perinatology.com check (6/6).
+2. A push to `main` now publishes the site by itself. The repo is public, which Netlify's free plan requires for that.
+3. One open item: switch off Netlify's "Powered by Netlify" badge, which covers the footer's verify line.
+4. Next: rehearse Friday's live change (the dedication line), and pick highlights from this log for the slide.
 
 ## Questions
 
@@ -186,7 +187,7 @@ were caught this way before they reached the record.
 
 ---
 
-## Turn 6 — 2026-09-29, 13:46:59 → @@END@@ CDT (@@DUR@@)
+## Turn 6 — 2026-09-29, 13:46:59 → 13:52:37 CDT (5 m 38 s)
 
 **Asked:** He's done the Netlify steps; merge it now.
 
@@ -203,9 +204,17 @@ PDFs, no credentials, no addresses; his email is on the commits; the two tables 
 numbers). He chose to make the repo public now (his Q17 plan, and the math is validated), which also
 keeps Friday's commit from the phone's cloud session from being blocked. Made it public, then pushed
 this log update to re-run the preview.
-@@RESULT@@
+The preview then built. Checked that it served 1.0.0 with both signed-off settings and kept the docs
+private, then merged PR #1 (merge commit 4c00a5d). **Live at 13:51:** the page reports 1.0.0; the
+code downloaded from the live site gives 10.0 and 4.9 for two of his perinatology cases, and 95.0 at
+Table IV's own 95th; `/PLAN.md` still returns 404. A screenshot of the live page showed a "Powered by
+Netlify" badge injected over the footer's verify line. Netlify's docs say the free plan can switch it
+off (Project configuration → General), with no redeploy; left that to him. Updated README,
+`CLAUDE.md` (public repo required; badge), the index line and the talk note.
 
-**Changed:** `site/index.html`, `site/sw.js` (v1.0.0), `MORNING.md`, this log. PR #1 merged to `main`.
+**Changed:** `site/index.html`, `site/sw.js` (v1.0.0), `MORNING.md`, `README.md`, `CLAUDE.md`, this
+log; repo made **public**; PR #1 merged to `main` and live. Outside the repo: `~/repos/INDEX.md` line
+and the talk note's `## Links` line updated to say the app is live.
 
 **Tip:** Watch the first automatic deploy instead of assuming it works. This one was blocked by a
 plan rule nobody had mentioned, and it surfaced on a preview, not on the live site.

@@ -21,7 +21,12 @@ support, so the rules below are hard.
 ## Layout and deploy
 - The app is `site/` only. `netlify.toml` publishes `site/`; the repo root holds docs.
 - Netlify site `fetal-calc` (id `db2f8710-315d-40cf-baf9-79789854dcab`), URL
-  https://fetal-calc.netlify.app. Once the GitHub link is made, a push to `main` deploys.
+  https://fetal-calc.netlify.app. Linked to GitHub 2026-09-29: **a push to `main` deploys**; PRs get
+  deploy previews at `deploy-preview-<n>--fetal-calc.netlify.app`.
+- **The repo must stay public.** Netlify's free plan blocks builds from private repos by
+  "unrecognized Git contributors" (it blocked PR #1's first preview).
+- Netlify injects a "Powered by Netlify" badge (bottom-right) unless it is switched off in
+  Project configuration → General; it can cover the footer's verify line.
 - Bump `VERSION` in `site/sw.js` (and the footer version) on every release so installed phones
   refresh.
 

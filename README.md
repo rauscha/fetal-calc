@@ -2,9 +2,8 @@
 
 **Fetal %ile**: a small, offline, installable phone app (PWA) giving the estimated fetal weight
 (EFW) percentile (Hadlock 1991) and the umbilical artery S/D percentile (Acharya 2005, free loop),
-with gestational age from weeks + days or an EDD (ACOG CO 700). **In development: the live site
-is a placeholder; the calculator is on branch `calculator` (PR #1), signed off and validated, awaiting
-a hand check on perinatology.com before merge.**
+with gestational age from weeks + days or an EDD (ACOG CO 700). **Live, version 1.0.0** (2026-09-29): math validated against the papers and a blind
+perinatology.com check (`VALIDATION.md`).
 
 - Live: https://fetal-calc.netlify.app
 - The app is `site/` (plain HTML/CSS/JS, no build step). Netlify publishes `site/` only, so the
