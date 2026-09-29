@@ -20,7 +20,7 @@ look, name and sharing). Nothing clinical is built until they are answered.
 
 ---
 
-## Turn 1 — 2026-09-28, 22:45:45 → 22:50 CDT (≈ 4 min)
+## Turn 1 — 2026-09-28, 22:45:45 → 22:50:07 CDT (4 m 22 s)
 
 **Asked:** Build a small offline phone app for EFW and umbilical artery Doppler percentiles for
 the department, shown as the example in Friday's talk. Keep this log. Ask the deciding questions
