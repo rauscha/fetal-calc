@@ -15,6 +15,8 @@ support, so the rules below are hard.
 ## Release gates (in `site/calc.js`)
 - `HADLOCK_METHOD` (null = EFW percentile on hold) and `ACHARYA_SIGNED_OFF` (false = S/D on hold)
   are set **only** on Andrew's decision (`SIGN-OFF.md`). Set 2026-09-29: `'table'` and `true`.
+- `AC_SOURCE` (null = AC percentile on hold): set 2026-09-29 to `'equation'` (Hadlock 1984 Table III
+  footnote), chosen because it matches Andrew's hospital system 5/5 and perinatology.com.
   `npm run validate` must exit 0 before anything clinical merges to `main`.
 - Work that touches the math goes on a branch + PR. `main` deploys to the public site.
 

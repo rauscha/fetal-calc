@@ -23,19 +23,19 @@ main { max-width: 32rem; margin: 0 auto;
   padding: max(12px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom)); }
 [hidden] { display: none !important; }
 
-.top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 6px 0 12px; }
+.top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 4px 0 10px; }
 .top h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
 .about-link, .back { color: var(--ink); font-weight: 600; text-underline-offset: 3px; padding: 8px 0; }
 
 .card { border: 1.5px solid var(--line); border-radius: 14px; background: var(--surface);
-  margin: 0 0 12px; padding: 10px 14px 14px; min-width: 0; }
+  margin: 0 0 10px; padding: 8px 12px 12px; min-width: 0; }
 .card legend { font-weight: 700; font-size: 1.05rem; padding: 0 6px; margin-left: -6px; }
-.src { font-size: .82rem; color: var(--muted); margin: -2px 0 8px; }
+.src { font-size: .8rem; color: var(--muted); margin: -2px 0 6px; }
 
 /* Segmented control: the chosen option is a filled, dark block with a check mark, so it reads
    by luminance and symbol, not hue. */
 .seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1.5px solid var(--strong);
-  border-radius: 10px; overflow: hidden; margin: 4px 0 12px; }
+  border-radius: 10px; overflow: hidden; margin: 2px 0 10px; }
 .seg label { position: relative; }
 .seg input { position: absolute; opacity: 0; inset: 0; margin: 0; }
 .seg span { display: block; text-align: center; padding: 10px 4px; font-size: .88rem; font-weight: 600;
@@ -50,29 +50,29 @@ main { max-width: 32rem; margin: 0 auto;
 .row.dates { flex-direction: column; gap: 8px; }
 .row.dates input { max-width: 14rem; }
 .field { display: block; font-size: .9rem; color: var(--muted); font-weight: 600; }
-.field input { display: block; width: 100%; margin-top: 4px; font: inherit; font-size: 1.35rem;
+.field input { display: block; width: 100%; margin-top: 4px; font: inherit; font-size: 1.25rem;
   font-weight: 600; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line);
-  border-radius: 10px; padding: 8px 12px; min-height: 48px; }
+  border-radius: 10px; padding: 6px 12px; min-height: 44px; }
 .field input[type="date"] { font-size: 1.05rem; }
 .field input:focus { outline: 3px solid var(--ink); outline-offset: 1px; }
 .field.wide input { max-width: 12rem; }
 
-.readback { margin: 10px 0 0; font-size: .95rem; min-height: 1.4em; }
+.readback { margin: 8px 0 0; font-size: .95rem; min-height: 1.4em; }
 .readback b { font-weight: 700; }
 .msg { margin: 8px 0 0; font-weight: 600; }
 .msg::before { content: "\26A0\FE0E\00a0"; }
 
-.result { margin-top: 10px; min-height: 1.4em; }
+.result { margin-top: 8px; min-height: 1.4em; }
 .result .empty { color: var(--muted); font-size: .92rem; margin: 0; }
-.big { font-size: 2.4rem; font-weight: 800; line-height: 1.05; margin: 2px 0 0; letter-spacing: -0.02em; }
+.big { font-size: 2.05rem; font-weight: 800; line-height: 1.05; margin: 2px 0 0; letter-spacing: -0.02em; }
 .big small { font-size: 1rem; font-weight: 600; letter-spacing: 0; margin-left: 4px; }
-.cut { font-size: 1.15rem; font-weight: 800; margin: 6px 0 2px; }
+.cut { font-size: 1.05rem; font-weight: 800; margin: 4px 0 2px; }
 .extrap { border: 2px dashed var(--ink); border-radius: 8px; padding: 6px 10px; font-weight: 700;
   font-size: .92rem; margin: 0 0 8px; }
 .hold { border: 2px dashed var(--line); border-radius: 8px; padding: 8px 10px; font-size: .92rem; margin: 0; }
-.bar { display: block; width: 100%; height: 64px; margin-top: 6px; color: var(--ink); overflow: visible; }
+.bar { display: block; width: 100%; height: 54px; margin-top: 4px; color: var(--ink); overflow: visible; }
 
-.clear { display: block; width: 100%; font: inherit; font-weight: 700; padding: 12px; min-height: 48px;
+.clear { display: block; width: 100%; font: inherit; font-weight: 700; padding: 10px; min-height: 44px;
   border-radius: 12px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); }
 .clear:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 

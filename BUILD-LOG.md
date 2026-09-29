@@ -1,7 +1,8 @@
 # fetal-calc — build log
 
 > **Tracked build complete: 2026-09-29, 14:04:46 CDT (turn 7).** Andrew ended the turn-by-turn record
-> here. Later work (Friday's dedication-line rehearsal, the report to the slide deck) is not logged.
+> there. Later untracked work: the install reminder, the report and caveats for the slide deck.
+> **Tracking resumed for turn 8 (the AC fix), at Andrew's request.**
 
 | | |
 |---|---|
@@ -271,3 +272,42 @@ time Andrew spent on Claude's multiple-choice questions inside a turn.
   questions in-session, plus his own offline steps (reading, the Netlify link, perinatology.com).
 - Wall-clock from the first prompt to the live app: 15 h 05 m (22:45 to 13:51 the next day),
   almost all of it overnight or between sessions.
+
+---
+
+## Turn 8 (tracking resumed) — 2026-09-29, 15:00:36 → @@END@@ CDT (@@DUR@@)
+
+**Asked:** "I totally forgot an important part, my colleague just pointed it out. Restart the timer."
+The app needs EFW *and* AC (both can diagnose FGR); neither required, both available; AC also by
+Hadlock; shrink the layout if needed. For the slide: "Andrea Loberg pointed out an error, I plugged it
+into Claude, and X minutes later, the fix was live on the app."
+
+**Did:**
+- Noticed at once that the Hadlock paper we had (the 1991 weight standard) has no AC data. Found the
+  three candidate Hadlock-group AC papers on PubMed and asked Andrew to choose, not choosing for him.
+  He chose to match perinatology.com. Its site blocks bots, so he looked it up and sent a screenshot
+  (Hadlock 1984 equation, SD 1.34 cm) and the paper's PDF.
+- While he looked, a background helper built the AC field (gated "on hold") and a more compact
+  layout, so four cards fit on a phone.
+- Read Hadlock 1984 off the page image: Table III footnote, AC = -13.3 + 1.61 MA - 0.00998 MA^2,
+  SD 1.34 cm. **The check stopped the work again:** that printed equation reproduces only 15 of the
+  57 AC values in the paper's own Table III, running up to 1.7 mm low. A refit showed why: the table
+  was built from unrounded coefficients (slope 1.614, printed as 1.61).
+- Andrew compared with his hospital ultrasound system. Five cases: four matched the printed equation
+  to the whole percent. The fifth matched no method, and Claude spotted that 48% implied 319 mm, not
+  329; Andrew confirmed a typo. So 5/5 match. Andrew chose the printed equation, so the app agrees with
+  both his hospital system and perinatology.com; the gap from Table III is recorded.
+- Switched AC on, allowed one decimal in AC (the hospital reports 322.6 mm), 15 tests pass, validation
+  passes, version 1.2.0; screenshot-checked; @@RESULT@@
+
+**Changed:** `site/calc.js` (Hadlock 1984 AC: printed equation, Table III, refit; `AC_SOURCE = 'equation'`),
+`site/app.js`, `site/index.html` (AC card, About), `site/app.css` (compact), `site/sw.js` (1.2.0),
+`validation/hadlock1984_table3_ac.csv`, `validation/validate.mjs`, `VALIDATION.md` (section 6),
+`tests/calc.test.mjs`, `CLAUDE.md`, `README.md`, this log.
+
+**Tip:** When a colleague spots a gap, the same discipline applies to the fix: which source, from the
+paper not memory, checked before it goes live. It took a few minutes longer and caught another
+disagreement inside a published paper.
+
+**Tip:** Check the new tool against the one your department already uses. Five cases from the hospital
+system settled a choice the paper alone couldn't, and surfaced a typo in the test data.

@@ -13,6 +13,7 @@ against each paper's published values. Do not edit by hand; re-run after any cha
 | ACOG CO 700: GA from EDD, 9 hand-worked dates | PASS |
 | Percentile display rule (never shows a number on the wrong side of a cutoff) | PASS |
 | Second check: perinatology.com, 6 hand-entered cases vs the app's Hadlock method | PASS |
+| Hadlock 1984 AC: Table III printed vs embedded (PASS); refit constants recomputed (PASS); active method = `equation`; matches Andrew's hospital system on 5/5 cases | PASS |
 
 ## 1. Hadlock 1991 (EFW percentile)
 
@@ -169,4 +170,45 @@ weight, `table` gives the 10th/3rd, `pct127` about the 9th/2.4th, and `log012` a
 | 36w 0d | 2813 | 50th | 50.0 | 50.0 | 49.9 | 50.0 | 50.0% |
 | 28w 3d | 1000 | - | 4.9 | 4.2 | 2.0 | 4.6 | 4.9% |
 | 34w 0d | 2000 | - | 11.6 | 10.6 | 7.5 | 11.1 | 11.6% |
+
+## 6. Hadlock 1984 (AC percentile)
+
+Source: Hadlock FP, Deter RL, Harrist RB, Park SK. *Radiology* 1984;152:497-501, Table III (p. 500),
+mean AC in cm every half week from 12.0 to 40.0, read off the page image. Footnote: "AC = -13.3 + 1.61 (MA) -
+0.00998 MA²; r² = 97.2%; 1 SD = 1.34 cm." All three methods below use SD = 1.34 cm.
+
+The printed equation does not reproduce the printed table: it runs low, by up to about 0.17 cm at 40 weeks,
+most likely because its coefficients were rounded when printed. A quadratic fitted to Table III by least
+squares (recomputed here: -13.315779 + 1.614095 MA -0.00999763 MA²) reproduces the table to rounding.
+
+| Method | Table III values reproduced (rounded to 0.1 cm) | Max difference from Table III | Range for "Extrapolated" |
+|---|---|---|---|
+| `table3`: Table III means, interpolated | 57 / 57 | 0.000 cm | 12 to 40 wk |
+| `equation`: printed equation (Table III footnote) | 15 / 57 | 0.168 cm | 14 to 42 wk |
+| `refit`: quadratic refitted to Table III | 56 / 57 | 0.050 cm | 12 to 40 wk |
+
+Percentile each method gives to an AC exactly at Table III's own 10th percentile (mean - 1.2816 x 1.34 cm):
+
+| GA | AC (mm) | `table3` | `equation` | `refit` |
+|---|---|---|---|---|
+| 20w 0d | 132.8 | 10.0 | 11.3 | 10.4 |
+| 28w 0d | 222.8 | 10.0 | 10.6 | 9.5 |
+| 34w 0d | 282.8 | 10.0 | 11.3 | 9.9 |
+| 38w 0d | 318.8 | 10.0 | 11.8 | 10.2 |
+| 40w 0d | 335.8 | 10.0 | 12.4 | 10.6 |
+
+### Hospital system comparison
+
+Andrew's hospital ultrasound system (percentile as it displays it, whole numbers). The 36w 2d / 319 mm case
+was first reported as 329 mm; Andrew confirmed that was a typo.
+
+| GA | AC (mm) | Hospital system | `table3` | `equation` | `refit` |
+|---|---|---|---|---|---|
+| 36w 5d | 325 | 54% | 50.9 | 54.2 | 50.9 |
+| 36w 2d | 319 | 48% | 44.5 | 47.6 | 44.4 |
+| 36w 2d | 322.6 | 58% | 55.2 | 58.3 | 55.1 |
+| 40w 0d | 368 | 89% | 86.9 | 89.3 | 87.6 |
+| 40w 0d | 358.5 | 70% | 65.9 | 70.4 | 67.2 |
+
+**Status: PASS.** Andrew chose `equation` on 2026-09-29: it matches his hospital system on all 5 cases to the whole percent, and it is the calculation perinatology.com lists. Its gap from the paper's own Table III (up to 0.17 cm, from coefficient rounding) is recorded above as a known discrepancy.
 
