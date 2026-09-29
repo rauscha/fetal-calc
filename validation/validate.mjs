@@ -109,6 +109,38 @@ results.perinatology = peri.every(([wk, d, g]) => {
   return s !== undefined && Math.abs(parseFloat(s) - C.hadlockPercentile(g, wk + d / 7, 'table')) < 0.05;
 });
 
+// ------------------------------------------------------------------------------------------ Hadlock 1984 AC
+const acTab = csv('hadlock1984_table3_ac.csv'); // Table III AC column, transcribed from the page image
+const acMethods = Object.keys(C.HADLOCK_AC.methods);
+const acRows = acMethods.map(m => {
+  const errs = acTab.map(r => C.acMeanCm(r.ma, m) - r.ac_cm);
+  const reproduced = acTab.filter(r => Math.abs(Math.round(C.acMeanCm(r.ma, m) * 10) / 10 - r.ac_cm) < 1e-9).length;
+  return { m, reproduced, maxErr: Math.max(...errs.map(Math.abs)) };
+});
+// The embedded table3 must equal the transcribed CSV, row for row.
+results.acTableEmbedded = acTab.length === C.HADLOCK_AC.table3.length &&
+  acTab.every((r, i) => C.HADLOCK_AC.table3[i][0] === r.ma && C.HADLOCK_AC.table3[i][1] === r.ac_cm);
+// Recompute the least-squares refit from the CSV and compare with the constants embedded in calc.js.
+{
+  const X = acTab.map(r => [1, r.ma, r.ma * r.ma]), y = acTab.map(r => r.ac_cm);
+  const A = [0, 1, 2].map(i => [...[0, 1, 2].map(j => X.reduce((s, x) => s + x[i] * x[j], 0)), X.reduce((s, x, k) => s + x[i] * y[k], 0)]);
+  for (let i = 0; i < 3; i++) {
+    const piv = A[i][i]; A[i] = A[i].map(v => v / piv);
+    for (let k = 0; k < 3; k++) if (k !== i) { const f = A[k][i]; A[k] = A[k].map((v, j) => v - f * A[i][j]); }
+  }
+  const [a, b, c] = A.map(r => r[3]), e = C.HADLOCK_AC.refit;
+  results.acRefitConstants = Math.abs(a - e.a) < 1e-9 && Math.abs(b - e.b) < 1e-9 && Math.abs(c - e.c) < 1e-12;
+  var acRefitRecomputed = { a, b, c };
+}
+const acCaseWeeks = [20, 28, 34, 38, 40];
+const acCases = acCaseWeeks.map(wk => {
+  const mean = acTab.find(r => r.ma === wk).ac_cm;
+  const acMm = (mean - 1.2816 * C.HADLOCK_AC.sd) * 10;
+  return { wk, acMm, pct: Object.fromEntries(acMethods.map(m => [m, C.acPercentile(acMm, wk, m)])) };
+});
+// Andrew's hospital-system comparison, to be filled in: [GA weeks, GA days, AC mm, hospital system's percentile]
+const hospitalCases = [];
+
 // ------------------------------------------------------------------------------------------ Write report
 const tick = ok => ok ? 'PASS' : '**FAIL**';
 const today = new Date().toISOString().slice(0, 10);
@@ -127,7 +159,7 @@ p(`| Acharya 2005: formula vs Table IV, 23 weeks x 9 percentiles (207 cells), to
 p(`| ACOG CO 700: GA from EDD, ${acogRows.length} hand-worked dates | ${tick(results.acog)} |`);
 p(`| Percentile display rule (never shows a number on the wrong side of a cutoff) | ${tick(results.format)} |`);
 p(`| Second check: perinatology.com, 6 hand-entered cases vs the app's Hadlock method | ${tick(results.perinatology)} |`);
-p(`| AC (Hadlock): ${C.AC_SOURCE ? 'source `' + C.AC_SOURCE + '`' : 'source not chosen'} | ${C.AC_SOURCE ? '(checks pending)' : '**ON HOLD**'} |`);
+p(`| Hadlock 1984 AC: Table III printed vs embedded (${tick(results.acTableEmbedded)}); refit constants recomputed (${tick(results.acRefitConstants)}); active method = ${C.AC_SOURCE ? '`' + C.AC_SOURCE + '`' : 'none (Andrew comparing with hospital system)'} | ${C.AC_SOURCE ? 'chosen' : '**ON HOLD**'} |`);
 p('');
 
 p('## 1. Hadlock 1991 (EFW percentile)');
@@ -254,8 +286,41 @@ for (const [wk, d, g, says] of peri) {
 }
 p('');
 
+p('## 6. Hadlock 1984 (AC percentile)');
+p('');
+p('Source: Hadlock FP, Deter RL, Harrist RB, Park SK. *Radiology* 1984;152:497-501, Table III (p. 500),');
+p('mean AC in cm every half week from 12.0 to 40.0, read off the page image. Footnote: "AC = -13.3 + 1.61 (MA) -');
+p('0.00998 MA²; r² = 97.2%; 1 SD = 1.34 cm." All three methods below use SD = 1.34 cm.');
+p('');
+p('The printed equation does not reproduce the printed table: it runs low, by up to about 0.17 cm at 40 weeks,');
+p('most likely because its coefficients were rounded when printed. A quadratic fitted to Table III by least');
+p(`squares (recomputed here: ${acRefitRecomputed.a.toFixed(6)} + ${acRefitRecomputed.b.toFixed(6)} MA ${acRefitRecomputed.c.toFixed(8)} MA²) reproduces the table to rounding.`);
+p('');
+p('| Method | Table III values reproduced (rounded to 0.1 cm) | Max difference from Table III | Range for "Extrapolated" |');
+p('|---|---|---|---|');
+for (const r of acRows) p(`| \`${r.m}\`: ${C.HADLOCK_AC.methods[r.m].label} | ${r.reproduced} / ${acTab.length} | ${r.maxErr.toFixed(3)} cm | ${C.HADLOCK_AC.methods[r.m].range.join(' to ')} wk |`);
+p('');
+p('Percentile each method gives to an AC exactly at Table III\'s own 10th percentile (mean - 1.2816 x 1.34 cm):');
+p('');
+p(`| GA | AC (mm) | ${acMethods.map(m => '`' + m + '`').join(' | ')} |`);
+p(`|---|---|${acMethods.map(() => '---').join('|')}|`);
+for (const c of acCases) p(`| ${c.wk}w 0d | ${c.acMm.toFixed(1)} | ${acMethods.map(m => f1(c.pct[m])).join(' | ')} |`);
+p('');
+p('### Hospital system comparison');
+p('');
+p('Andrew\'s hospital ultrasound system, same inputs (to be filled in):');
+p('');
+p(`| GA | AC (mm) | Hospital system | ${acMethods.map(m => '`' + m + '`').join(' | ')} |`);
+p(`|---|---|---|${acMethods.map(() => '---').join('|')}|`);
+for (const [wk, d, mm, hosp] of hospitalCases) p(`| ${wk}w ${d}d | ${mm} | ${hosp} | ${acMethods.map(m => f1(C.acPercentile(mm, wk + d / 7, m))).join(' | ')} |`);
+if (!hospitalCases.length) p('| _to fill in_ | | | | | |');
+p('');
+p(C.AC_SOURCE ? `**Status: method \`${C.AC_SOURCE}\` chosen.**` : '**Status: ON HOLD.** The AC percentile is computed by none of these until Andrew picks a method.');
+p('');
+
 fs.writeFileSync(path.join(root, 'VALIDATION.md'), out.join('\n') + '\n');
 allPass = results.hadlockMedian && results.acog && results.format && results.acharya && results.perinatology !== false &&
+  results.acTableEmbedded && results.acRefitConstants &&
   (C.HADLOCK_METHOD ? results.hadlockSpread : true);
 console.log(JSON.stringify(results));
 console.log(allPass && C.HADLOCK_METHOD && C.ACHARYA_SIGNED_OFF && C.AC_SOURCE ? 'ALL PASS' : 'NOT READY TO RELEASE (see VALIDATION.md)');

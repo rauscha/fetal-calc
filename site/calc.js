@@ -141,20 +141,67 @@ export function acharyaSdPercentile(sd, gaWeeks) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Abdominal circumference (AC) percentile, Hadlock. The source paper has NOT been chosen or read
-// yet (Andrew, 2026-09-29: match the Hadlock AC reference perinatology.com uses). No coefficients
-// live here until they are read from that paper's PDF and checked against its published values.
+// Abdominal circumference (AC) percentile. Hadlock FP, Deter RL, Harrist RB, Park SK. Estimating
+// fetal age: computer-assisted analysis of multiple fetal growth parameters. Radiology
+// 1984;152:497-501. 361 fetuses, 14-42 menstrual weeks. (The reference perinatology.com lists.)
+//
+// p. 500, Table III ("Predicted Fetal Measurements at Specific Menstrual Age") gives the mean AC in
+// cm every half week from 12.0 to 40.0; its footnote reads:
+//   "AC = -13.3 + 1.61 (MA) - 0.00998 MA^2; r^2 = 97.2%; 1 SD = 1.34 cm."
+// The printed equation does NOT reproduce the printed table (it runs up to 0.17 cm low by 40 wk; its
+// coefficients were evidently rounded). Three candidate methods, all with SD = 1.34 cm; which one the
+// app uses is Andrew's decision (VALIDATION.md):
+//   table3   - Table III means, linear interpolation between half-week rows (linear extrapolation
+//              from the two end rows outside 12-40 wk). Every number printed in the paper.
+//   equation - the footnote's printed quadratic. Matches perinatology.com.
+//   refit    - a quadratic DERIVED here by least squares from Table III (not printed in the paper);
+//              reproduces the table to rounding. Recomputed and checked by validation/validate.mjs.
 // ---------------------------------------------------------------------------------------------
 
-// Chosen by Andrew once the source is confirmed. null = AC percentile "on hold": nothing computed.
+// Chosen by Andrew: one of 'table3' | 'equation' | 'refit'. null = AC percentile "on hold".
 export let AC_SOURCE = null;
 
-// Placeholder: filled in from the chosen paper (citation, coefficients, range in weeks).
-export const HADLOCK_AC = { source: null, range: null };
+export const HADLOCK_AC = {
+  sd: 1.34, // cm, Table III footnote
+  // Table III, p. 500: [menstrual age (wk), mean AC (cm)], as printed.
+  table3: [
+    [12.0, 4.6], [12.5, 5.3], [13.0, 6.0], [13.5, 6.7], [14.0, 7.3], [14.5, 8.0], [15.0, 8.6], [15.5, 9.3],
+    [16.0, 9.9], [16.5, 10.6], [17.0, 11.2], [17.5, 11.9], [18.0, 12.5], [18.5, 13.1], [19.0, 13.7], [19.5, 14.4],
+    [20.0, 15.0], [20.5, 15.6], [21.0, 16.2], [21.5, 16.8], [22.0, 17.4], [22.5, 17.9], [23.0, 18.5], [23.5, 19.1],
+    [24.0, 19.7], [24.5, 20.2], [25.0, 20.8], [25.5, 21.3], [26.0, 21.9], [26.5, 22.4], [27.0, 23.0], [27.5, 23.5],
+    [28.0, 24.0], [28.5, 24.6], [29.0, 25.1], [29.5, 25.6], [30.0, 26.1], [30.5, 26.6], [31.0, 27.1], [31.5, 27.6],
+    [32.0, 28.1], [32.5, 28.6], [33.0, 29.1], [33.5, 29.5], [34.0, 30.0], [34.5, 30.5], [35.0, 30.9], [35.5, 31.4],
+    [36.0, 31.8], [36.5, 32.3], [37.0, 32.7], [37.5, 33.2], [38.0, 33.6], [38.5, 34.0], [39.0, 34.4], [39.5, 34.8],
+    [40.0, 35.3],
+  ],
+  equation: { a: -13.3, b: 1.61, c: -0.00998 }, // Table III footnote, as printed
+  // DERIVED by least squares from the 57 Table III rows (not printed in the paper).
+  refit: { a: -13.315778647511399, b: 1.6140951177156535, c: -0.009997631025654034 },
+  methods: {
+    table3: { label: 'Table III means, interpolated', range: [12, 40] },
+    equation: { label: 'printed equation (Table III footnote)', range: [14, 42] },
+    refit: { label: 'quadratic refitted to Table III', range: [12, 40] },
+  },
+};
 
-export function acPercentile(acMm, gaWeeks) {
-  if (AC_SOURCE === null) return null;
-  return null; // unreachable until the source's math is added and validated
+export function acMeanCm(gaWeeks, method = AC_SOURCE) {
+  if (method === 'equation' || method === 'refit') {
+    const { a, b, c } = HADLOCK_AC[method];
+    return a + b * gaWeeks + c * gaWeeks * gaWeeks;
+  }
+  if (method !== 'table3') return null;
+  const t = HADLOCK_AC.table3, n = t.length;
+  let i = 0;
+  if (gaWeeks <= t[0][0]) i = 0;
+  else if (gaWeeks >= t[n - 1][0]) i = n - 2;
+  else while (!(gaWeeks >= t[i][0] && gaWeeks <= t[i + 1][0])) i++;
+  const [x0, y0] = t[i], [x1, y1] = t[i + 1];
+  return y0 + (gaWeeks - x0) * (y1 - y0) / (x1 - x0);
+}
+
+export function acPercentile(acMm, gaWeeks, method = AC_SOURCE) {
+  if (!method || !(method in HADLOCK_AC.methods)) return null;
+  return 100 * normCdf((acMm / 10 - acMeanCm(gaWeeks, method)) / HADLOCK_AC.sd);
 }
 
 // ---------------------------------------------------------------------------------------------

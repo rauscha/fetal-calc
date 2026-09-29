@@ -72,3 +72,24 @@ test('no AC percentile is computed while its Hadlock source is unchosen', () => 
   assert.equal(C.AC_SOURCE, null);
   assert.equal(C.acPercentile(250, 30), null);
 });
+
+test('AC table3 method reproduces every Hadlock 1984 Table III value at the printed half-weeks', () => {
+  const rows = fs.readFileSync(new URL('../validation/hadlock1984_table3_ac.csv', import.meta.url), 'utf8').trim().split('\n').slice(1);
+  assert.equal(rows.length, 57);
+  for (const r of rows) {
+    const [ma, ac] = r.split(',').map(Number);
+    assert.ok(Math.abs(C.acMeanCm(ma, 'table3') - ac) < 1e-9, `MA ${ma}`);
+  }
+});
+
+test('AC equation method is the printed quadratic', () => {
+  assert.ok(Math.abs(C.acMeanCm(30, 'equation') - (-13.3 + 1.61 * 30 - 0.00998 * 900)) < 1e-12);
+});
+
+test('AC refit method reproduces every Table III row within 0.051 cm', () => {
+  for (const [ma, ac] of C.HADLOCK_AC.table3) assert.ok(Math.abs(C.acMeanCm(ma, 'refit') - ac) <= 0.051, `MA ${ma}`);
+});
+
+test('AC percentile with no method is null', () => {
+  assert.equal(C.acPercentile(300, 34, null), null);
+});

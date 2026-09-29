@@ -187,7 +187,7 @@ function update() {
     const pct = C.acPercentile(+acRaw, ga.days / 7);
     const words = pct < 3 ? '\u25BC\u25BC Below the 3rd percentile' : pct < 10 ? '\u25BC Below the 10th percentile' : '';
     render(acOut, { label: 'AC', pct, lower: [3, 10], ticks: [3, 10, 50], words,
-      range: C.HADLOCK_AC.range, gaDays: ga.days });
+      range: C.HADLOCK_AC.methods[C.AC_SOURCE].range, gaDays: ga.days });
   }
 
   // S/D
