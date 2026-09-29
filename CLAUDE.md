@@ -35,3 +35,17 @@ support, so the rules below are hard.
 - `npm run validate`: the release gate. Runs the app's own math against the papers' tables
   (`validation/*.csv`, transcribed from the PDFs) and rewrites `VALIDATION.md`.
 - `npm run serve`, then http://localhost:8000. No build step, no dependencies.
+
+## Small text changes, and the Friday finale (2026-10-02)
+Andrew will ask for a change by voice from the Claude app on his phone (a cloud session with this
+repo), live at the end of his department talk. The planned change is a dedication line such as
+"Made for UChicago OB/GYN, October 2".
+- Put it in `site/index.html` as a plain `<p class="dedication">...</p>` directly after the
+  calculator's `</header>` (inside `<section id="calc">`). Text only: never touch `site/calc.js`.
+- Bump the version in the two `<span class="ver">` tags and `VERSION` in `site/sw.js`.
+- Run `npm test` (it must pass; no math changed, so `npm run validate` is unaffected).
+- **Live change:** commit to `main` and push. That push is the whole deploy (about 10 s on Netlify).
+  If the session started on a `claude/...` branch, merge it into `main` (fast-forward) and push `main`.
+- **Rehearsal:** push a branch and open a PR instead. Netlify posts a preview at
+  `https://deploy-preview-<PR number>--fetal-calc.netlify.app`. Close the PR without merging, so
+  the real change is still new on Friday.

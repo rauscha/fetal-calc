@@ -206,6 +206,25 @@ methodNote.textContent = C.HADLOCK_METHOD
   ? `Spread: ${C.HADLOCK.spreads[C.HADLOCK_METHOD].label}.`
   : 'Spread: method awaiting sign-off.';
 
+// Install reminder: hidden when already running from the home screen (iOS reports this through
+// navigator.standalone). Where the browser offers its own install prompt (Chrome on Android),
+// show a one-tap button for it.
+if (window.navigator.standalone) $('install').hidden = true;
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  installPrompt = e;
+  $('install-btn').hidden = false;
+});
+$('install-btn').addEventListener('click', async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  await installPrompt.userChoice;
+  installPrompt = null;
+  $('install-btn').hidden = true;
+});
+window.addEventListener('appinstalled', () => { $('install').hidden = true; });
+
 applyMode();
 show();
 update();

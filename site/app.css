@@ -76,6 +76,15 @@ main { max-width: 32rem; margin: 0 auto;
   border-radius: 12px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); }
 .clear:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 
+.install { margin-top: 16px; border: 1.5px dashed var(--line); border-radius: 14px; padding: 10px 14px; }
+.install h2 { font-size: 1rem; margin: 2px 0 4px; }
+.install p { margin: 6px 0; font-size: .92rem; }
+.install-btn { font: inherit; font-weight: 700; padding: 10px 14px; min-height: 44px; margin: 4px 0;
+  border-radius: 10px; border: 0; background: var(--strong); color: var(--on-strong); }
+.install-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+/* Already installed: no need to explain how. */
+@media (display-mode: standalone) { .install { display: none; } }
+
 footer { margin-top: 18px; color: var(--muted); font-size: .85rem; }
 footer p { margin: 4px 0; }
 footer .verify { color: var(--ink); font-weight: 600; }
