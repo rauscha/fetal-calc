@@ -8,8 +8,8 @@ against each paper's published values. Do not edit by hand; re-run after any cha
 | Check | Result |
 |---|---|
 | Hadlock 1991: equation median vs Table 1 50th, weeks 10-40 (31 weeks) | PASS |
-| Hadlock 1991: spread vs Table 1 3rd/10th/90th/97th, active method = `none (not chosen)` | **ON HOLD: Andrew to choose (below)** |
-| Acharya 2005: formula vs Table IV, 23 weeks x 9 percentiles (207 cells), tolerance ±0.01 | **FAIL** (18 cells, weeks 19, 21) |
+| Hadlock 1991: spread vs Table 1 3rd/10th/90th/97th, active method = `table` | PASS |
+| Acharya 2005: formula vs Table IV, 23 weeks x 9 percentiles (207 cells), tolerance ±0.01 | PASS (189/207 within tolerance; the 18 cells at weeks 19 and 21 are a known table discrepancy, formula used per Andrew 2026-09-29) |
 | ACOG CO 700: GA from EDD, 9 hand-worked dates | PASS |
 | Percentile display rule (never shows a number on the wrong side of a cutoff) | PASS |
 
@@ -64,9 +64,9 @@ and 2.5th. Only `table` reports them as the 10th and 3rd.
 90th (1,824 g). From the equation, 1,559 x 1.25 = 1,949 g, so it is almost certainly a typesetting error
 (1,649 for 1,949). It is excluded from the checks above; the app never uses the table, only the equation.
 
-**Status: ON HOLD.** Andrew set the rule (QUESTIONS.md, Q12): compute from the model and, if model and
-table disagree beyond a set tolerance, stop and show him. They do, so the app computes no EFW percentile
-until he picks a method.
+**Status: PASS.** Andrew's rule (QUESTIONS.md, Q12) was to compute from the model and stop if model and
+table disagreed. The stated SDs did, so the work stopped; on 2026-09-29 he chose `table`, which reproduces
+all 123 cells of Table 1 within tolerance. Pending: a hand check on perinatology.com (section 5).
 
 ## 2. Acharya 2005 (umbilical artery S/D percentile)
 
@@ -111,7 +111,7 @@ printed 95th at 19 weeks (6.26) scores as the 94.7th by the formula, and at 21 w
 94.7th, against 95.0th at 30 weeks. So an S/D between the printed 95th and about 1% above it, at those two
 weeks only, would be flagged "above the 95th" by the table but not by the formula.
 
-**Status: MISMATCH at weeks 19 and 21: needs Andrew's decision before release.**
+**Status: PASS.** Andrew decided on 2026-09-29 to use the formula at every week; the two printed rows at 19 and 21 weeks are recorded here as a known discrepancy in the table.
 
 ## 3. ACOG CO 700 (gestational age from an EDD)
 
@@ -160,10 +160,10 @@ spread that site uses: at each exact Table 1 cutoff weight, `table` gives the 10
 
 | GA | EFW (g) | Table 1 says | App `table` | App `pct127` | App `log012` | App `pct13` | perinatology.com |
 |---|---|---|---|---|---|---|---|
-| 24w 0d | 556 | 10th | 10.0 | 9.1 | 6.0 | 9.6 | _to fill in_ |
 | 30w 0d | 1294 | 10th | 10.0 | 9.0 | 6.0 | 9.5 | _to fill in_ |
 | 30w 0d | 1169 | 3rd | 3.0 | 2.4 | 0.8 | 2.7 | _to fill in_ |
-| 36w 0d | 2813 | 50th | 50.0 | 50.0 | 49.9 | 50.0 | _to fill in_ |
 | 40w 0d | 3004 | 10th | 10.0 | 9.0 | 6.0 | 9.6 | _to fill in_ |
-| 40w 0d | 2714 | 3rd | 3.0 | 2.4 | 0.8 | 2.7 | _to fill in_ |
+| 36w 0d | 2813 | 50th | 50.0 | 50.0 | 49.9 | 50.0 | _to fill in_ |
+| 28w 3d | 1000 | - | 4.9 | 4.2 | 2.0 | 4.6 | _to fill in_ |
+| 34w 0d | 2000 | - | 11.6 | 10.6 | 7.5 | 11.1 | _to fill in_ |
 

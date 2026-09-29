@@ -31,9 +31,14 @@ test('Hadlock "table" method reproduces the 10th and 3rd at 40 weeks', () => {
   assert.ok(Math.abs(C.hadlockWeightAt(3, 40, 'table') - 2714) <= 0.005 * 2714);
 });
 
-test('no EFW percentile is computed while the Hadlock method is unchosen', () => {
-  assert.equal(C.HADLOCK_METHOD, null);
-  assert.equal(C.hadlockPercentile(1200, 30), null);
+test('Hadlock method is the signed-off one, and a baby at Table 1\'s 10th reads as the 10th', () => {
+  assert.equal(C.HADLOCK_METHOD, 'table');
+  assert.equal(C.hadlockPercentile(3004, 40).toFixed(0), '10');
+  assert.equal(C.hadlockPercentile(1169, 30).toFixed(0), '3');
+});
+
+test('with no method chosen, no EFW percentile is computed', () => {
+  assert.equal(C.hadlockPercentile(1200, 30, null), null);
 });
 
 test('Acharya S/D formula matches Table IV within 0.01, except the known weeks 19 and 21', () => {

@@ -1,4 +1,10 @@
-# Waiting for Andrew's sign-off
+# Sign-off — decided 2026-09-29 (turn 4)
+
+> **Andrew's answers, 2026-09-29 13:34 CDT:** (1) **`table`**, pending a hand check on perinatology.com;
+> (2) **use the formula**; (3) all six details agreed ("this looks great"; color on top left to my
+> design judgment; CO 700 "is the newest"); (4) he'll link Netlify and run the perinatology.com
+> inputs, with steps and numbers given in the session. Both gates are now set in `site/calc.js`, and
+> `npm run validate` passes.
 
 Written 2026-09-29, turn 3. The app is built on branch `calculator` (draft PR), but **no clinical
 math is live**: production still shows the placeholder, and in the real build both percentiles

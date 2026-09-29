@@ -77,9 +77,9 @@ export const HADLOCK = {
   },
 };
 
-// The method the app uses. null = not yet chosen by Andrew: the app shows the EFW percentile as
-// "on hold" and computes nothing. Set to one of the keys of HADLOCK.spreads once he decides.
-export let HADLOCK_METHOD = null;
+// The method the app uses. Chosen by Andrew 2026-09-29 (SIGN-OFF.md): 'table', the spread that
+// reproduces Table 1. (null would put the EFW percentile "on hold" and compute nothing.)
+export let HADLOCK_METHOD = 'table';
 export function setHadlockMethod(m) {
   if (m !== null && !(m in HADLOCK.spreads)) throw new Error('unknown Hadlock method ' + m);
   HADLOCK_METHOD = m;
@@ -120,9 +120,9 @@ export function hadlockPercentile(efwGrams, gaWeeks, method = HADLOCK_METHOD) {
 // Table IV lists the resulting percentiles for weeks 19-41.
 // ---------------------------------------------------------------------------------------------
 
-// false until Andrew signs off the Table IV mismatch at weeks 19 and 21 (VALIDATION.md, section 2):
-// the app then shows the S/D percentile as "on hold" and computes nothing.
-export let ACHARYA_SIGNED_OFF = false;
+// Signed off by Andrew 2026-09-29 (SIGN-OFF.md): use the formula at every week, including 19 and
+// 21 where the printed Table IV rows sit 0.6-0.8% below it. (false would put S/D "on hold".)
+export let ACHARYA_SIGNED_OFF = true;
 
 export const ACHARYA_SD = { m0: 4.16676, m1: -0.9188, v0: 0.4851, v1: -0.2678, v2: 0.04115, range: [19, 42] };
 

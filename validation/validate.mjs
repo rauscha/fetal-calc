@@ -61,7 +61,11 @@ for (const r of ach) for (const pc of pcts) {
   achCells.push({ week: r.week, pc, v, tab, diff: v - tab, ok: Math.abs(v - tab) <= 0.0105 });
 }
 const achFails = achCells.filter(c => !c.ok);
-results.acharya = achFails.length === 0;
+// Weeks 19 and 21: printed rows sit 0.6-0.8% below the formula. Andrew chose the formula on
+// 2026-09-29 (SIGN-OFF.md), so these are accepted as a known table discrepancy, still shown in bold.
+const ACCEPTED_WEEKS = C.ACHARYA_SIGNED_OFF ? [19, 21] : [];
+const achUnaccepted = achFails.filter(c => !ACCEPTED_WEEKS.includes(c.week));
+results.acharya = achUnaccepted.length === 0;
 
 // ------------------------------------------------------------------------------------------ ACOG
 // Expected values worked out by hand (calendar arithmetic), independent of the code.
@@ -106,7 +110,7 @@ p('| Check | Result |');
 p('|---|---|');
 p(`| Hadlock 1991: equation median vs Table 1 50th, weeks 10-40 (31 weeks) | ${tick(results.hadlockMedian)} |`);
 p(`| Hadlock 1991: spread vs Table 1 3rd/10th/90th/97th, active method = \`${C.HADLOCK_METHOD ?? 'none (not chosen)'}\` | ${C.HADLOCK_METHOD ? tick(results.hadlockSpread) : '**ON HOLD: Andrew to choose (below)**'} |`);
-p(`| Acharya 2005: formula vs Table IV, 23 weeks x 9 percentiles (207 cells), tolerance ±0.01 | ${tick(results.acharya)}${results.acharya ? '' : ` (${achFails.length} cells, weeks ${[...new Set(achFails.map(c => c.week))].join(', ')})`} |`);
+p(`| Acharya 2005: formula vs Table IV, 23 weeks x 9 percentiles (207 cells), tolerance ±0.01 | ${tick(results.acharya)}${achFails.length ? ` (${achCells.length - achFails.length}/${achCells.length} within tolerance; the ${achFails.length} cells at weeks ${[...new Set(achFails.map(c => c.week))].join(' and ')} are a known table discrepancy, formula used per Andrew 2026-09-29)` : ''} |`);
 p(`| ACOG CO 700: GA from EDD, ${acogRows.length} hand-worked dates | ${tick(results.acog)} |`);
 p(`| Percentile display rule (never shows a number on the wrong side of a cutoff) | ${tick(results.format)} |`);
 p('');
@@ -152,9 +156,15 @@ p('**Misprint in Table 1:** at 30 weeks the 97th percentile is printed as **1,64
 p('90th (1,824 g). From the equation, 1,559 x 1.25 = 1,949 g, so it is almost certainly a typesetting error');
 p('(1,649 for 1,949). It is excluded from the checks above; the app never uses the table, only the equation.');
 p('');
-p('**Status: ON HOLD.** Andrew set the rule (QUESTIONS.md, Q12): compute from the model and, if model and');
-p('table disagree beyond a set tolerance, stop and show him. They do, so the app computes no EFW percentile');
-p('until he picks a method.');
+if (C.HADLOCK_METHOD) {
+  p(`**Status: ${results.hadlockSpread ? 'PASS' : '**FAIL**'}.** Andrew's rule (QUESTIONS.md, Q12) was to compute from the model and stop if model and`);
+  p('table disagreed. The stated SDs did, so the work stopped; on 2026-09-29 he chose `' + C.HADLOCK_METHOD + '`, which reproduces');
+  p('all 123 cells of Table 1 within tolerance. Pending: a hand check on perinatology.com (section 5).');
+} else {
+  p('**Status: ON HOLD.** Andrew set the rule (QUESTIONS.md, Q12): compute from the model and, if model and');
+  p('table disagree beyond a set tolerance, stop and show him. They do, so the app computes no EFW percentile');
+  p('until he picks a method.');
+}
 p('');
 
 p('## 2. Acharya 2005 (umbilical artery S/D percentile)');
@@ -186,7 +196,9 @@ p(`printed 95th at 19 weeks (${ach.find(x => x.week === 19).p95}) scores as the 
 p(`${f1(pc95(21))}th, against ${f1(pc95(30))}th at 30 weeks. So an S/D between the printed 95th and about 1% above it, at those two`);
 p('weeks only, would be flagged "above the 95th" by the table but not by the formula.');
 p('');
-p(`**Status: ${results.acharya ? 'PASS' : 'MISMATCH at weeks 19 and 21: needs Andrew\'s decision before release.'}**`);
+p(results.acharya
+  ? '**Status: PASS.** Andrew decided on 2026-09-29 to use the formula at every week; the two printed rows at 19 and 21 weeks are recorded here as a known discrepancy in the table.'
+  : '**Status: MISMATCH at weeks 19 and 21: needs Andrew\'s decision before release.**');
 p('');
 
 p('## 3. ACOG CO 700 (gestational age from an EDD)');
@@ -217,10 +229,13 @@ p('9th/2.5th, and `log012` about the 6th/0.8th.');
 p('');
 p('| GA | EFW (g) | Table 1 says | App `table` | App `pct127` | App `log012` | App `pct13` | perinatology.com |');
 p('|---|---|---|---|---|---|---|---|');
-const peri = [[24, 556, '10th'], [30, 1294, '10th'], [30, 1169, '3rd'], [36, 2813, '50th'], [40, 3004, '10th'], [40, 2714, '3rd']];
-for (const [wk, g, says] of peri) {
-  const v = k => f1(C.hadlockPercentile(g, wk, k));
-  p(`| ${wk}w 0d | ${g} | ${says} | ${v('table')} | ${v('pct127')} | ${v('log012')} | ${v('pct13')} | _to fill in_ |`);
+// Inputs sent to Andrew 2026-09-29 without the expected answers (a blind check).
+const peri = [[30, 0, 1294, '10th'], [30, 0, 1169, '3rd'], [40, 0, 3004, '10th'], [36, 0, 2813, '50th'],
+  [28, 3, 1000, '-'], [34, 0, 2000, '-']];
+const periSite = {}; // filled in from Andrew's report: key 'wk-d-g' -> text shown by perinatology.com
+for (const [wk, d, g, says] of peri) {
+  const v = k => f1(C.hadlockPercentile(g, wk + d / 7, k));
+  p(`| ${wk}w ${d}d | ${g} | ${says} | ${v('table')} | ${v('pct127')} | ${v('log012')} | ${v('pct13')} | ${periSite[`${wk}-${d}-${g}`] ?? '_to fill in_'} |`);
 }
 p('');
 
@@ -228,5 +243,5 @@ fs.writeFileSync(path.join(root, 'VALIDATION.md'), out.join('\n') + '\n');
 allPass = results.hadlockMedian && results.acog && results.format && results.acharya &&
   (C.HADLOCK_METHOD ? results.hadlockSpread : true);
 console.log(JSON.stringify(results));
-console.log(allPass && C.HADLOCK_METHOD ? 'ALL PASS' : 'NOT READY TO RELEASE (see VALIDATION.md)');
-process.exit(allPass && C.HADLOCK_METHOD ? 0 : 1);
+console.log(allPass && C.HADLOCK_METHOD && C.ACHARYA_SIGNED_OFF ? 'ALL PASS' : 'NOT READY TO RELEASE (see VALIDATION.md)');
+process.exit(allPass && C.HADLOCK_METHOD && C.ACHARYA_SIGNED_OFF ? 0 : 1);
