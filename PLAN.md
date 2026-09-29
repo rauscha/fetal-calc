@@ -1,53 +1,78 @@
 # Plan: screens and flow
 
-> **DRAFT: waiting for Andrew's approval.** Written 2026-09-28 before his answers to
-> `QUESTIONS.md`. Every bracketed item depends on an answer. No clinical code is written until he
-> says go.
+> **REVISED 2026-09-29 from Andrew's answers in `QUESTIONS.md`. Waiting for his go-ahead.**
+> No clinical code is written until he approves. Items marked *(proposal)* are my suggestions
+> for details the questions didn't cover; approve or change them.
+
+## Who and where
+
+MFM attendings and fellows, and OB/GYNs at the community affiliate whose radiology reads list an
+EFW but no percentiles. Used at the bedside / on L&D and in clinic counselling. It's a clinical
+aid, with a short verify line in the footer:
+"Clinical decision support. Verify against your ultrasound report and clinical judgment."
 
 ## Shape
 
-One installable web app (a PWA): a single page that works offline once opened, and can be added
-to the phone's home screen. No accounts, no server, nothing stored. Hosted on Netlify; every push
-to `main` publishes it.
+An installable offline web app named **Fetal %ile** at **fetal-calc.netlify.app**. Plain,
+neutral look; no institutional branding. Stores nothing: every open starts blank; no analytics,
+no cookies.
 
 ## Screens
 
-1. **Home**: app name, two large buttons: **Fetal weight percentile** and **Umbilical artery
-   Doppler percentile**, plus a small **About & references** link and the disclaimer. [Or a single
-   combined screen, if both are usually done together: see question 2.]
+**1. Calculator (the home screen)** *(proposal: one screen, not two, since a growth scan
+usually gives both numbers; fewer taps at the bedside)*
 
-2. **Fetal weight percentile**
-   - Gestational age: [weeks + days | EDD (+ scan date) | LMP], per question 4. When an EDD is
-     used, the GA it works out to is shown back in words ("EDD 1 Jan 2027 → 26 weeks 3 days on
-     the scan date"), so a wrong date is caught.
-   - EFW in grams [or lb/oz; or biometry], per question 5.
-   - Result: the percentile [exact / band / z-score], per question 8, as a large number **with its
-     meaning in words** ("below the 10th percentile"), plus a **position marker on a horizontal
-     bar** marked at the cutoffs Andrew names. Color never carries the result: the words, a symbol
-     (▼ below / ▲ above / ● within), and the marker's position each say it on their own.
-   - Out-of-range GA handled per question 11.
+- **Gestational age**, with three ways in (a segmented switch):
+  - **Weeks + days** (two number fields).
+  - **EDD, as of today**: GA = 280 days − (EDD − today), per ACOG CO 700.
+  - **EDD + scan date**: the same, counted to the scan date.
+  - The GA used is always read back in words, e.g. "GA used: 28 weeks 3 days (from EDD,
+    as of 29 Sep 2026)", so a wrong date is caught.
+- **EFW (grams)** → **EFW percentile** (Hadlock 1991 growth curve).
+- **UA S/D** → **S/D percentile** (Acharya 2005, free loop).
+- Each result updates as you type, with no submit button. Either field can be left empty.
+- **Clear** button resets everything.
+- Footer: the verify line, the dedication line on Friday, the version, and an **About** link.
 
-3. **Umbilical artery Doppler percentile**: same GA entry (carried over if already entered),
-   [S/D | PI | RI] entry, [AEDF / REDF option], and the same result layout.
+**2. About**: full citations, the span of weeks each source covers (read from the PDFs), the
+method (Hadlock computed from the paper's model, checked against its table), "Reference
+populations: singleton pregnancies", and a link to `VALIDATION.md`.
 
-4. **About & references**: full citation of each source, what range of weeks each covers, the
-   method used, a link to `VALIDATION.md`, and the version/date of the build.
+## How a result reads
 
-## Flow
+Every state reads through **words, a symbol and position**, never color:
 
-Open → pick a tool → enter GA → enter the measurement → the result updates as you type (no
-submit button) → change any input and the result follows. A **Clear** button resets. Nothing is
-saved between visits.
+```
+EFW percentile
+  7th                        ← exact percentile, large
+  ▼ Below the 10th percentile ← cutoff words (only when a cutoff is crossed)
+  |--3--10-----------50------------------|   ← bar with labeled ticks at the cutoffs,
+       ▲                                        marker at the result's position
+```
 
-## Accessibility
-
-- Every result state reads through words, a symbol and position; tested in grayscale.
-- Large tap targets, numeric keypad for number fields, readable at arm's length.
-- Light and dark themes by the phone's setting.
+- Cutoffs (only these): EFW **below the 10th** (▼), EFW **below the 3rd** (▼▼, replaces the
+  10th line), UA S/D **above the 95th** (▲).
+- No interpretation, diagnosis or management text.
+- *(proposal)* When no cutoff is crossed, no cutoff line is shown; the number and marker stand
+  alone.
+- *(proposal)* Whole-number percentiles from 1st to 99th; below 1 or above 99, one decimal
+  (e.g. "0.4th"), so extremes aren't hidden.
+- **Outside a source's span of weeks:** the value is still shown, with a label above it:
+  "⚠ Extrapolated: GA is outside this source's range (X to Y weeks)."
 
 ## Checking the math (after approval)
 
-Coefficients come from the PDFs only. `VALIDATION.md` compares the app's output with each paper's
-own published values at several gestational ages across its range; any mismatch stops the work.
-Second check: perinatology.com's Hadlock calculator (headless browser, or a list of inputs for
-Andrew to try by hand if it blocks bots).
+- Coefficients come from the PDFs only; the PDFs are never committed.
+- **Hadlock:** compute from the paper's model and SD; compare with its published percentile table
+  at every week; if they disagree anywhere beyond a set tolerance, stop and show Andrew.
+- **Acharya:** compare with the paper's published S/D percentiles at several weeks across its
+  range.
+- **ACOG:** check EDD → GA against worked dates.
+- Results go in `VALIDATION.md`. Any mismatch stops the work.
+- Second check: a short list of inputs for Andrew to try on perinatology.com in his own browser
+  (it blocks headless browsers).
+
+## After validation
+
+Make the repo public (before Friday). Friday's live change: add the dedication line
+"Made for UChicago OB/GYN, October 2" to the home screen, spoken from the phone and pushed.

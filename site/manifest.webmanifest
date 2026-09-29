@@ -1,6 +1,6 @@
 {
-  "name": "Fetal Calc",
-  "short_name": "Fetal Calc",
+  "name": "Fetal %ile",
+  "short_name": "Fetal %ile",
   "description": "Fetal growth and Doppler percentile calculator (in development).",
   "start_url": "./",
   "scope": "./",

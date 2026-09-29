@@ -1,7 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="96" fill="#1f2a44"/>
-  <!-- percentile curves: three rising lines of different weight -->
-  <path d="M96 400 C 200 380, 300 300, 416 150" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round"/>
-  <path d="M96 420 C 210 410, 320 350, 416 250" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-dasharray="4 24" opacity=".9"/>
-  <path d="M96 380 C 190 350, 280 250, 416 80" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-dasharray="4 24" opacity=".9"/>
+  <!-- faint chart grid, so the lines read as curves on a chart -->
+  <g stroke="#3d4d73" stroke-width="6">
+    <path d="M56 136 H456 M56 236 H456 M56 336 H456"/>
+    <path d="M156 56 V456 M256 56 V456 M356 56 V456"/>
+  </g>
+  <!-- axes -->
+  <path d="M56 56 V456 H456" fill="none" stroke="#5a6b94" stroke-width="10" stroke-linecap="round"/>
+  <!-- growth curves: solid median between two dotted percentile lines -->
+  <path d="M64 396 C 180 380, 300 270, 424 64" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" stroke-dasharray="1 34"/>
+  <path d="M110 462 C 230 456, 350 380, 456 236" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" stroke-dasharray="1 34"/>
+  <path d="M68 436 C 196 428, 320 330, 444 144" fill="none" stroke="#ffffff" stroke-width="40" stroke-linecap="round"/>
 </svg>
