@@ -39,5 +39,5 @@
   so nothing is blocked.
 
 ## Time
-- Claude working time: **≈ 5 min** (turn 1, 22:45:45 → about 22:51 CDT).
+- Claude working time: **4 m 22 s** (turn 1, 22:45:45 → 22:50:07 CDT, by `date`; to be checked against transcript timestamps at the end).
 - Wall-clock since turn 1: the same. It's one turn so far.

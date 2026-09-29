@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Turns** | 1 |
-| **Claude working time** | 0 h 04 m (turn 1: 22:45:45 → 22:50 CDT) |
-| **Wall-clock since turn 1** | 0 h 04 m (turn 1 started 2026-09-28 22:45:45 CDT) |
+| **Claude working time** | 0 h 04 m 22 s (turn 1: 22:45:45 → 22:50:07 CDT) |
+| **Wall-clock since turn 1** | 0 h 04 m 22 s (turn 1 started 2026-09-28 22:45:45 CDT) |
 | **Live URL** | https://fetal-calc.netlify.app (placeholder, no clinical content) |
 
 **Where things stand**
@@ -33,7 +33,7 @@ code. He's asleep tonight: do only what doesn't need his answers, then write `MO
 placeholder screens, created the private repo, created the Netlify site and deployed the
 placeholder, and recorded the URL for the deck session.
 
-**Changed:**
+**Changed:** (commit 7eac9d9, plus this timing fix)
 - New repo `rauscha/fetal-calc` (private, `main`): `QUESTIONS.md`, `PLAN.md` (draft, awaiting
   approval), `site/` (index.html, manifest, service worker, icons), `netlify.toml`, `README.md`,
   `CLAUDE.md`, `MORNING.md`, this log.
