@@ -54,7 +54,9 @@ if (spans !== 2) fail(`expected 2 version tags reading ${from} in index.html, fo
 html = html.split(`<span class="ver">${from}</span>`).join(`<span class="ver">${to}</span>`);
 
 if (dry) {
-  console.log(`DRY RUN: would set ${remove ? 'no dedication line' : `"${text}"`}, version ${from} -> ${to}. Nothing written.`);
+  let net = 'blocked (the script will still push; press Reload about 10 s after "Pushed")';
+  try { const r0 = await fetch(`https://fetal-calc.netlify.app/?r=${Date.now()}`, { cache: 'no-store' }); if (r0.ok) net = 'OK'; } catch { /* reported below */ }
+  console.log(`DRY RUN: would set ${remove ? 'no dedication line' : `"${text}"`}, version ${from} -> ${to}. Nothing written. Live-site check: ${net}.`);
   process.exit(0);
 }
 writeFileSync(indexPath, html);
@@ -79,11 +81,16 @@ console.log(`Pushed to main at ${secs()} (version ${to}). Waiting for Netlify...
 // 5. Watch the live site until it really shows the change, so "LIVE" means Reload will show it.
 const want = (body) => (remove ? !body.includes('class="dedication"') : body.includes(`<p class="dedication">${esc(text)}</p>`))
   && body.includes(`<span class="ver">${to}</span>`);
-for (let i = 0; i < 45; i++) {
+// A network error means this machine can't see the site at all: say so at once rather than retry.
+for (let i = 0; i < 20; i++) {
+  let body;
   try {
-    const res = await fetch(`https://fetal-calc.netlify.app/?r=${Date.now()}`, { cache: 'no-store' });
-    if (want(await res.text())) { console.log(`LIVE at ${secs()}: ${remove ? 'dedication removed' : text} (version ${to}). Press Reload.`); process.exit(0); }
-  } catch { /* the network check is a convenience; the push already happened */ }
+    body = await (await fetch(`https://fetal-calc.netlify.app/?r=${Date.now()}`, { cache: 'no-store' })).text();
+  } catch {
+    console.log(`PUSHED at ${secs()}; can't see the live site from here. Press Reload in about 10 s.`);
+    process.exit(0);
+  }
+  if (want(body)) { console.log(`LIVE at ${secs()}: ${remove ? 'dedication removed' : text} (version ${to}). Press Reload.`); process.exit(0); }
   await new Promise((ok) => setTimeout(ok, 2000));
 }
-console.log(`Pushed, but the live site didn't show it within 90 s. Press Reload anyway.`);
+console.log(`PUSHED at ${secs()}, not showing yet after 40 s. Press Reload anyway.`);
