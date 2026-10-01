@@ -320,3 +320,15 @@ disagreement inside a published paper.
 
 **Tip:** Check the new tool against the one your department already uses. Five cases from the hospital
 system settled a choice the paper alone couldn't, and surfaced a typo in the test data.
+
+## Turn 9 — 2026-10-01, 17:12 CDT (rehearsal of Friday's text change)
+
+**Asked:** Add a line under the title that says "rehearsal October 1st" and push it to `main`.
+
+**Did:** Added `<p class="dedication">rehearsal October 1st</p>` right after the calculator's
+`</header>`, bumped the version to 1.2.1 (both footer tags and `VERSION` in `site/sw.js`),
+`npm test` 15/15 pass. No math touched, so `npm run validate` is unaffected. Pushed straight to
+`main` as Andrew asked (CLAUDE.md's rehearsal path was a PR; his explicit instruction overrode it),
+so this line is **live on the public site** until removed.
+
+**Changed:** `site/index.html`, `site/sw.js`, this log.
