@@ -38,16 +38,20 @@ support, so the rules below are hard.
   (`validation/*.csv`, transcribed from the PDFs) and rewrites `VALIDATION.md`.
 - `npm run serve`, then http://localhost:8000. No build step, no dependencies.
 
-## Small text changes, and the Friday finale (2026-10-02)
-Andrew will ask for a change by voice from the Claude app on his phone (a cloud session with this
-repo), live at the end of his department talk. The planned change is a dedication line such as
-"Made for UChicago OB/GYN, October 2".
-- Put it in `site/index.html` as a plain `<p class="dedication">...</p>` directly after the
-  calculator's `</header>` (inside `<section id="calc">`). Text only: never touch `site/calc.js`.
-- Bump the version in the two `<span class="ver">` tags and `VERSION` in `site/sw.js`.
-- Run `npm test` (it must pass; no math changed, so `npm run validate` is unaffected).
-- **Live change:** commit to `main` and push. That push is the whole deploy (about 10 s on Netlify).
-  If the session started on a `claude/...` branch, merge it into `main` (fast-forward) and push `main`.
-- **Rehearsal:** push a branch and open a PR instead. Netlify posts a preview at
-  `https://deploy-preview-<PR number>--fetal-calc.netlify.app`. Close the PR without merging, so
-  the real change is still new on Friday.
+## The Friday finale (2026-10-02): one command, nothing else
+
+Andrew asks by voice from the Claude app on his phone, live at the end of his department talk, for a
+dedication line under the title. Speed is the whole point: the room is waiting.
+
+**Run exactly this, and nothing else** (no reading files first, no planning, no hand edits, no PR):
+
+    node scripts/finale.mjs "<the line Andrew said>"
+
+It adds or replaces `<p class="dedication">` under the calculator's header, bumps the version in
+`site/sw.js` and both `<span class="ver">` tags, runs the tests, commits, pushes to `main` (the
+whole deploy), then waits until the live site shows the line. Reply with its last line only, e.g.
+`LIVE at 14.2 s: ... Press Reload.` To take the line out: `node scripts/finale.mjs --remove`.
+`--dry-run` shows what would change and touches nothing. The script never touches `site/calc.js`.
+Don't add a BUILD-LOG.md entry for it.
+
+If the session started on a `claude/...` branch, that's fine: the script pushes `HEAD:main`.
