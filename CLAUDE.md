@@ -38,20 +38,14 @@ support, so the rules below are hard.
   (`validation/*.csv`, transcribed from the PDFs) and rewrites `VALIDATION.md`.
 - `npm run serve`, then http://localhost:8000. No build step, no dependencies.
 
-## The Friday finale (2026-10-02): one command, nothing else
+## Dedication line (used live at Andrew's department talk, 2026-10-02)
 
-Andrew asks by voice from the Claude app on his phone, live at the end of his department talk, for a
-dedication line under the title. Speed is the whole point: the room is waiting.
+`node scripts/finale.mjs "<line>"` adds or replaces a `<p class="dedication">` under the title, bumps
+the version (`site/sw.js` and both `<span class="ver">` tags), runs the tests, pushes to `main` and
+waits for the live site. `--remove` takes it out; `--dry-run` changes nothing. Only use it when
+Andrew asks for a dedication line; for anything else, work normally.
 
-**Run exactly this, and nothing else** (no reading files first, no planning, no hand edits, no PR):
-
-    node scripts/finale.mjs "<the line Andrew said>"
-
-It adds or replaces `<p class="dedication">` under the calculator's header, bumps the version in
-`site/sw.js` and both `<span class="ver">` tags, runs the tests, commits, pushes to `main` (the
-whole deploy), then waits until the live site shows the line. Reply with its last line only, e.g.
-`LIVE at 14.2 s: ... Press Reload.` To take the line out: `node scripts/finale.mjs --remove`.
-`--dry-run` shows what would change and touches nothing. The script never touches `site/calc.js`.
-Don't add a BUILD-LOG.md entry for it.
-
-If the session started on a `claude/...` branch, that's fine: the script pushes `HEAD:main`.
+**Keep `site/calc.js` lines 53-91 where they are.** The public talk deck (mfm.media/p/bespoke,
+slide "Want to see the math?") shows those lines verbatim, with their line numbers, as the place
+anyone can read the Hadlock 1991 equation. Its build checks them against this file; if they have to
+move, say so, so the slide can be rebuilt.
